@@ -7,22 +7,28 @@ using NeuronaLabs.Services.QueryServices;
 
 namespace NeuronaLabs.Services.Authentication;
 
-public class AuthenticationService(
-    AuthenticationQueryService patientQueryService,
-    AuthenticationMutationService authenticationMutationService,
-    IJwtTokenGenerator jwtTokenGenerator,
-    IPasswordHasher<Patient> passwordHasher
-    )
-    : IAuthenticationService
+public class AuthenticationService : IAuthenticationService
 {
-    private readonly AuthenticationQueryService _authenticationQueryService = patientQueryService;
-    private readonly AuthenticationMutationService _authenticationMutationService = authenticationMutationService;
-    private readonly IJwtTokenGenerator _jwtTokenGenerator = jwtTokenGenerator;
-    private readonly IPasswordHasher<Patient> _passwordHasher = passwordHasher;
+    private readonly AuthenticationQueryService _authenticationQueryService;
+    private readonly AuthenticationMutationService _authenticationMutationService;
+    private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IPasswordHasher<Patient> _passwordHasher;
+
+    public AuthenticationService(
+        AuthenticationQueryService patientQueryService,
+        AuthenticationMutationService authenticationMutationService,
+        IJwtTokenGenerator jwtTokenGenerator,
+        IPasswordHasher<Patient> passwordHasher)
+    {
+        _authenticationQueryService = patientQueryService;
+        _authenticationMutationService = authenticationMutationService;
+        _jwtTokenGenerator = jwtTokenGenerator;
+        _passwordHasher = passwordHasher;
+    }
 
     public async Task<GetLoginResponse> LoginAsync(
-        string email, 
-        string password, 
+        string email,
+        string password,
         CancellationToken cancellationToken
         )
     {
