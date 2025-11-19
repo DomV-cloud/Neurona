@@ -8,7 +8,10 @@ public class PatientRepository(NeuronaLabsDbContext dbContext) : IPatientReposit
 {
     private readonly NeuronaLabsDbContext _dbContext = dbContext;
 
-    public async Task<Patient> CreatePatientAsync(Patient patient, CancellationToken cancellationToken)
+    public async Task<Patient> CreatePatientAsync(
+        Patient patient,
+        CancellationToken cancellationToken
+    )
     {
         await _dbContext.Patients.AddAsync(patient, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -16,12 +19,16 @@ public class PatientRepository(NeuronaLabsDbContext dbContext) : IPatientReposit
         return patient;
     }
 
-    public async Task<PagedResponse<GetAllPatientsResponse>> GetAllPatientsAsync(int pageSize, int page, CancellationToken cancellationToken)
+    public async Task<PagedResponse<GetAllPatientsResponse>> GetAllPatientsAsync(
+        int pageSize,
+        int page,
+        CancellationToken cancellationToken
+    )
     {
-        var query = _dbContext.Patients
-         .AsNoTracking()
-         .OrderBy(p => p.LastName)
-         .ThenBy(p => p.FirstName);
+        var query = _dbContext
+            .Patients.AsNoTracking()
+            .OrderBy(p => p.LastName)
+            .ThenBy(p => p.FirstName);
 
         var totalCount = await query.CountAsync(cancellationToken);
 
@@ -33,8 +40,7 @@ public class PatientRepository(NeuronaLabsDbContext dbContext) : IPatientReposit
                 p.FirstName,
                 p.LastName,
                 p.Age,
-                p.Diagnostics
-                    .OrderByDescending(dr => dr.Timestamp)
+                p.Diagnostics.OrderByDescending(dr => dr.Timestamp)
                     .Select(dr => new DiagnosticRecordResponse(
                         dr.ID,
                         dr.DiagnosisText,
@@ -45,41 +51,44 @@ public class PatientRepository(NeuronaLabsDbContext dbContext) : IPatientReposit
             ))
             .ToListAsync(cancellationToken);
 
-        return new PagedResponse<GetAllPatientsResponse>(
-            items,
-            page,
-            pageSize,
-            totalCount
-        );
+        return new PagedResponse<GetAllPatientsResponse>(items, page, pageSize, totalCount);
     }
 
-    public async Task<Patient?> GetPatientByEmailAsync(string email, CancellationToken cancellationToken)
+    public async Task<Patient?> GetPatientByEmailAsync(
+        string email,
+        CancellationToken cancellationToken
+    )
     {
-        return await _dbContext.Patients
-            .AsNoTracking()
+        return await _dbContext
+            .Patients.AsNoTracking()
             .Where(p => p.Email == email)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<GetPatientDetailInfoResponse> GetPatientDetailInfoAsync(Guid patientID, CancellationToken cancellationToken)
+    public async Task<GetPatientDetailInfoResponse> GetPatientDetailInfoAsync(
+        Guid patientID,
+        CancellationToken cancellationToken
+    )
     {
-        var patientDetail = await _dbContext.Patients
-            .AsNoTracking()
-            .Where(p => p.ID == patientID)
-            .Select(p => new GetPatientDetailInfoResponse(
-                p.FirstName,
-                p.LastName,
-                p.Email,
-                p.Age,
-                p.Diagnostics.Select(dr => new DiagnosticRecordResponse(
-                    dr.ID,
-                    dr.DiagnosisText,
-                    dr.Notes,
-                    dr.Timestamp
+        var patientDetail =
+            await _dbContext
+                .Patients.AsNoTracking()
+                .Where(p => p.ID == patientID)
+                .Select(p => new GetPatientDetailInfoResponse(
+                    p.FirstName,
+                    p.LastName,
+                    p.Email,
+                    p.Age,
+                    p.Diagnostics.Select(dr => new DiagnosticRecordResponse(
+                            dr.ID,
+                            dr.DiagnosisText,
+                            dr.Notes,
+                            dr.Timestamp
+                        ))
+                        .ToList()
                 ))
-                .ToList()
-            ))
-            .FirstOrDefaultAsync(cancellationToken) ?? throw new InvalidOperationException($"Patient with ID '{patientID}' was not found.");
+                .FirstOrDefaultAsync(cancellationToken)
+            ?? throw new InvalidOperationException($"Patient with ID '{patientID}' was not found.");
 
         return patientDetail;
     }

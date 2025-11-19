@@ -16,7 +16,8 @@ public class AuthenticationService : IAuthenticationService
     public AuthenticationService(
         IPatientRepository patientRepository,
         IJwtTokenGenerator jwtTokenGenerator,
-        IPasswordHasher<Patient> passwordHasher)
+        IPasswordHasher<Patient> passwordHasher
+    )
     {
         _patientRepository = patientRepository;
         _jwtTokenGenerator = jwtTokenGenerator;
@@ -27,10 +28,11 @@ public class AuthenticationService : IAuthenticationService
         string email,
         string password,
         CancellationToken cancellationToken
-        )
+    )
     {
-        var patient = await _patientRepository.GetPatientByEmailAsync(email, cancellationToken)
-                  ?? throw new InvalidOperationException("Invalid email or password.");
+        var patient =
+            await _patientRepository.GetPatientByEmailAsync(email, cancellationToken)
+            ?? throw new InvalidOperationException("Invalid email or password.");
 
         var result = _passwordHasher.VerifyHashedPassword(patient, patient.PasswordHash, password);
         if (result == PasswordVerificationResult.Failed)
@@ -48,14 +50,22 @@ public class AuthenticationService : IAuthenticationService
         return new GetLoginResponse(patient.FirstName, patient.LastName, patient.Email, token);
     }
 
-    public async Task<RegisteredPatientResponse> RegisterAsync(CreatePatientRequest input, CancellationToken cancellationToken)
+    public async Task<RegisteredPatientResponse> RegisterAsync(
+        CreatePatientRequest input,
+        CancellationToken cancellationToken
+    )
     {
         var normalizedEmail = input.Email.Trim().ToLowerInvariant();
 
-        var userExists = await _patientRepository.GetPatientByEmailAsync(normalizedEmail, cancellationToken);
+        var userExists = await _patientRepository.GetPatientByEmailAsync(
+            normalizedEmail,
+            cancellationToken
+        );
         if (userExists != null)
         {
-            throw new InvalidOperationException($"User with this email '{input.Email}' already exists.");
+            throw new InvalidOperationException(
+                $"User with this email '{input.Email}' already exists."
+            );
         }
 
         var patient = new Patient
@@ -80,7 +90,10 @@ public class AuthenticationService : IAuthenticationService
 
         patient.PasswordHash = _passwordHasher.HashPassword(patient, input.Password);
 
-        var createdPatient = await _patientRepository.CreatePatientAsync(patient, cancellationToken);
+        var createdPatient = await _patientRepository.CreatePatientAsync(
+            patient,
+            cancellationToken
+        );
 
         var token = _jwtTokenGenerator.GenerateToken(createdPatient);
         if (string.IsNullOrEmpty(token))
@@ -88,6 +101,11 @@ public class AuthenticationService : IAuthenticationService
             throw new InvalidOperationException("Could not generate JWT token.");
         }
 
-        return new RegisteredPatientResponse(createdPatient.FirstName, createdPatient.LastName, createdPatient.Email, token);
+        return new RegisteredPatientResponse(
+            createdPatient.FirstName,
+            createdPatient.LastName,
+            createdPatient.Email,
+            token
+        );
     }
 }

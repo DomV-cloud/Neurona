@@ -10,7 +10,8 @@ public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Patient>()
+        modelBuilder
+            .Entity<Patient>()
             .HasMany(p => p.Diagnostics)
             .WithOne(dr => dr.Patient)
             .HasForeignKey(dr => dr.PatientID)
@@ -23,33 +24,39 @@ public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
         var diag1Timestamp = DateTimeOffset.Parse("2024-01-10T09:00:00Z");
         var diag2Timestamp = DateTimeOffset.Parse("2024-01-15T14:30:00Z");
 
-        modelBuilder.Entity<Patient>().HasData(new Patient
-        {
-            ID = patientId,
-            FirstName = "Alice",
-            LastName = "Novak",
-            Email = "alice.novak@example.com",
-            Age = 34,
-            PasswordHash = "$2y$10$mZANmx707zBLu2aBdDqeJeYzGvnO2Og3IoxgApJQbe.UuFxmrVoz2", // Heslo123
-        });
+        modelBuilder
+            .Entity<Patient>()
+            .HasData(
+                new Patient
+                {
+                    ID = patientId,
+                    FirstName = "Alice",
+                    LastName = "Novak",
+                    Email = "alice.novak@example.com",
+                    Age = 34,
+                    PasswordHash = "$2y$10$mZANmx707zBLu2aBdDqeJeYzGvnO2Og3IoxgApJQbe.UuFxmrVoz2", // Heslo123
+                }
+            );
 
-        modelBuilder.Entity<DiagnosticRecord>().HasData(
-            new DiagnosticRecord
-            {
-                ID = diagnosis1Id,
-                PatientID = patientId,
-                Timestamp = diag1Timestamp,
-                DiagnosisText = "Seasonal Allergy",
-                Notes = "Prescribed antihistamines"
-            },
-            new DiagnosticRecord
-            {
-                ID = diagnosis2Id,
-                PatientID = patientId,
-                Timestamp = diag2Timestamp,
-                DiagnosisText = "Sinus Infection",
-                Notes = "Recommended antibiotics"
-            }
-        );
+        modelBuilder
+            .Entity<DiagnosticRecord>()
+            .HasData(
+                new DiagnosticRecord
+                {
+                    ID = diagnosis1Id,
+                    PatientID = patientId,
+                    Timestamp = diag1Timestamp,
+                    DiagnosisText = "Seasonal Allergy",
+                    Notes = "Prescribed antihistamines",
+                },
+                new DiagnosticRecord
+                {
+                    ID = diagnosis2Id,
+                    PatientID = patientId,
+                    Timestamp = diag2Timestamp,
+                    DiagnosisText = "Sinus Infection",
+                    Notes = "Recommended antibiotics",
+                }
+            );
     }
 }

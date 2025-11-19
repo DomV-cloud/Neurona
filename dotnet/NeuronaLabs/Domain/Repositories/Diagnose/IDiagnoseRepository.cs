@@ -5,5 +5,8 @@ namespace NeuronaLabs.Domain.Repositories.Diagnose;
 
 public interface IDiagnoseRepository
 {
-    Task<UpdatedPatientDiagnose> UpdateDiagnose(UpdatePatientDiagnoseRequest request, CancellationToken cancellationToken);
+    Task<UpdatedPatientDiagnose> UpdateDiagnose(
+        UpdatePatientDiagnoseRequest request,
+        CancellationToken cancellationToken
+    );
 }

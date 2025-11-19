@@ -23,7 +23,10 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddCustomOptions(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddCustomOptions(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         services.Configure<JwtTokenSettings>(configuration.GetSection(nameof(JwtTokenSettings)));
 
