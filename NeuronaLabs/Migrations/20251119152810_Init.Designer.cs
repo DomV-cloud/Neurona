@@ -12,8 +12,8 @@ using NeuronaLabs.Database;
 namespace NeuronaLabs.Migrations
 {
     [DbContext(typeof(NeuronaLabsDbContext))]
-    [Migration("20251119135633_UpdateLastDiagnosisID")]
-    partial class UpdateLastDiagnosisID
+    [Migration("20251119152810_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,20 +86,14 @@ namespace NeuronaLabs.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("LastDiagnosisID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("LastDiagnosisID");
 
                     b.ToTable("Patients");
 
@@ -124,16 +118,6 @@ namespace NeuronaLabs.Migrations
                         .IsRequired();
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("NeuronaLabs.Domain.Patient", b =>
-                {
-                    b.HasOne("NeuronaLabs.Domain.DiagnosticRecord", "LastDiagnosis")
-                        .WithMany()
-                        .HasForeignKey("LastDiagnosisID")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("LastDiagnosis");
                 });
 
             modelBuilder.Entity("NeuronaLabs.Domain.Patient", b =>

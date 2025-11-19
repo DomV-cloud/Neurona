@@ -83,20 +83,14 @@ namespace NeuronaLabs.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("LastDiagnosisID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("LastDiagnosisID");
 
                     b.ToTable("Patients");
 
@@ -121,16 +115,6 @@ namespace NeuronaLabs.Migrations
                         .IsRequired();
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("NeuronaLabs.Domain.Patient", b =>
-                {
-                    b.HasOne("NeuronaLabs.Domain.DiagnosticRecord", "LastDiagnosis")
-                        .WithMany()
-                        .HasForeignKey("LastDiagnosisID")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("LastDiagnosis");
                 });
 
             modelBuilder.Entity("NeuronaLabs.Domain.Patient", b =>

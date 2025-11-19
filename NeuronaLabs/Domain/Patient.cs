@@ -6,12 +6,9 @@ public class Patient
 
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
-    public required string Email { get; set; }
+    public required string Email { get; set; } // setter for lowercase? AND Index?
     public required int Age { get; set; }
-    public required string PasswordHash { get; set; }
-
-    public DiagnosticRecord? LastDiagnosis { get; set; }
-    public Guid? LastDiagnosisID { get; set; }
+    public string? PasswordHash { get; set; } // setter private?
 
     public List<DiagnosticRecord>? Diagnostics { get; set; } = [];
 }

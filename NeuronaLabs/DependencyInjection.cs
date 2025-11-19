@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using NeuronaLabs.Authentication.JWT;
 using NeuronaLabs.Domain;
+using NeuronaLabs.Domain.Repositories.Diagnose;
 using NeuronaLabs.Domain.Repositories.Patients;
 using NeuronaLabs.Services.Authentication;
 
@@ -15,6 +16,7 @@ public static class DependencyInjection
         services.AddScoped<IPasswordHasher<Patient>, PasswordHasher<Patient>>();
 
         services.AddScoped<IPatientRepository, PatientRepository>();
+        services.AddScoped<IDiagnoseRepository, DiagnoseRepository>();
 
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 

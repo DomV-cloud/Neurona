@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using NeuronaLabs.Domain;
-using System;
 
 namespace NeuronaLabs.Database;
 
@@ -15,14 +13,8 @@ public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
         modelBuilder.Entity<Patient>()
             .HasMany(p => p.Diagnostics)
             .WithOne(dr => dr.Patient)
-            .HasForeignKey(dr => dr.PatientId)
+            .HasForeignKey(dr => dr.PatientID)
             .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<Patient>()
-            .HasOne(p => p.LastDiagnosis)
-            .WithMany()
-            .HasForeignKey(p => p.LastDiagnosisID)
-            .OnDelete(DeleteBehavior.NoAction);
 
         var patientId = Guid.Parse("11111111-1111-1111-1111-111111111111");
         var diagnosis1Id = Guid.Parse("22222222-2222-2222-2222-222222222222");
@@ -45,7 +37,7 @@ public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
             new DiagnosticRecord
             {
                 ID = diagnosis1Id,
-                PatientId = patientId,
+                PatientID = patientId,
                 Timestamp = diag1Timestamp,
                 DiagnosisText = "Seasonal Allergy",
                 Notes = "Prescribed antihistamines"
@@ -53,7 +45,7 @@ public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
             new DiagnosticRecord
             {
                 ID = diagnosis2Id,
-                PatientId = patientId,
+                PatientID = patientId,
                 Timestamp = diag2Timestamp,
                 DiagnosisText = "Sinus Infection",
                 Notes = "Recommended antibiotics"

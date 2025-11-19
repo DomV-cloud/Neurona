@@ -12,4 +12,10 @@ public class Query
        CancellationToken cancellationToken = default
         )
        => patientRepository.GetAllPatientsAsync(pageSize, page, cancellationToken);
+
+    public Task<GetPatientDetailInfoResponse> GetPatientDetails(
+        Guid patientId,
+        [Service] IPatientRepository patientRepository,
+        CancellationToken cancellationToken)
+        => patientRepository.GetPatientDetailInfoAsync(patientId, cancellationToken);
 }

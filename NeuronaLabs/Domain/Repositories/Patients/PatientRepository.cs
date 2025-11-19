@@ -4,23 +4,25 @@ using NeuronaLabs.DTOs.Responses;
 
 namespace NeuronaLabs.Domain.Repositories.Patients;
 
-public class PatientRepository : IPatientRepository
+public class PatientRepository(NeuronaLabsDbContext dbContext) : IPatientRepository
 {
-    private readonly NeuronaLabsDbContext _dbContext;
+    private readonly NeuronaLabsDbContext _dbContext = dbContext;
 
-    public PatientRepository(NeuronaLabsDbContext dbContext)
+    public async Task<Patient> CreatePatientAsync(Patient patient, CancellationToken cancellationToken)
     {
-        _dbContext = dbContext;
+        await _dbContext.Patients.AddAsync(patient, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return patient;
     }
 
     public async Task<PagedResponse<GetAllPatientsResponse>> GetAllPatientsAsync(int pageSize, int page, CancellationToken cancellationToken)
     {
         var query = _dbContext.Patients
          .AsNoTracking()
-         .Include(p => p.LastDiagnosis)
          .OrderBy(p => p.LastName)
          .ThenBy(p => p.FirstName);
-        
+
         var totalCount = await query.CountAsync(cancellationToken);
 
         var items = await query
@@ -31,14 +33,15 @@ public class PatientRepository : IPatientRepository
                 p.FirstName,
                 p.LastName,
                 p.Age,
-                p.LastDiagnosis == null
-                    ? null
-                    : new DiagnosticRecordResponse(
-                        p.LastDiagnosis.ID,
-                        p.LastDiagnosis.DiagnosisText,
-                        p.LastDiagnosis.Notes,
-                        p.LastDiagnosis.Timestamp
-                    )
+                p.Diagnostics
+                    .OrderByDescending(dr => dr.Timestamp)
+                    .Select(dr => new DiagnosticRecordResponse(
+                        dr.ID,
+                        dr.DiagnosisText,
+                        dr.Notes,
+                        dr.Timestamp
+                    ))
+                    .FirstOrDefault()
             ))
             .ToListAsync(cancellationToken);
 
@@ -56,5 +59,28 @@ public class PatientRepository : IPatientRepository
             .AsNoTracking()
             .Where(p => p.Email == email)
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<GetPatientDetailInfoResponse> GetPatientDetailInfoAsync(Guid patientID, CancellationToken cancellationToken)
+    {
+        var patientDetail = await _dbContext.Patients
+            .AsNoTracking()
+            .Where(p => p.ID == patientID)
+            .Select(p => new GetPatientDetailInfoResponse(
+                p.FirstName,
+                p.LastName,
+                p.Email,
+                p.Age,
+                p.Diagnostics.Select(dr => new DiagnosticRecordResponse(
+                    dr.ID,
+                    dr.DiagnosisText,
+                    dr.Notes,
+                    dr.Timestamp
+                ))
+                .ToList()
+            ))
+            .FirstOrDefaultAsync(cancellationToken) ?? throw new InvalidOperationException($"Patient with ID '{patientID}' was not found.");
+
+        return patientDetail;
     }
 }
