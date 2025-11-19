@@ -34,12 +34,13 @@ public class PatientRepository(NeuronaLabsDbContext dbContext) : IPatientReposit
                 p.LastName,
                 p.Age,
                 p.Diagnostics
-                    .OrderByDescending(dr => dr.Timestamp)
+                    .OrderByDescending(dr => dr.CreatedAt)
                     .Select(dr => new DiagnosticRecordResponse(
                         dr.ID,
                         dr.DiagnosisText,
                         dr.Notes,
-                        dr.Timestamp
+                        dr.CreatedAt,
+                        dr.UpdatedAt
                     ))
                     .FirstOrDefault()
             ))
@@ -75,7 +76,8 @@ public class PatientRepository(NeuronaLabsDbContext dbContext) : IPatientReposit
                     dr.ID,
                     dr.DiagnosisText,
                     dr.Notes,
-                    dr.Timestamp
+                    dr.CreatedAt,
+                    dr.UpdatedAt
                 ))
                 .ToList()
             ))

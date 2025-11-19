@@ -6,7 +6,7 @@ namespace NeuronaLabs.Database;
 public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<Patient> Patients => Set<Patient>();
-    public DbSet<DiagnosticRecord> DiagnosticRecords => Set<DiagnosticRecord>();
+    public DbSet<Diagnose> DiagnosticRecords => Set<Diagnose>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -33,20 +33,20 @@ public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
             PasswordHash = "$2y$10$mZANmx707zBLu2aBdDqeJeYzGvnO2Og3IoxgApJQbe.UuFxmrVoz2", // Heslo123
         });
 
-        modelBuilder.Entity<DiagnosticRecord>().HasData(
-            new DiagnosticRecord
+        modelBuilder.Entity<Diagnose>().HasData(
+            new Diagnose
             {
                 ID = diagnosis1Id,
                 PatientID = patientId,
-                Timestamp = diag1Timestamp,
+                CreatedAt = diag1Timestamp,
                 DiagnosisText = "Seasonal Allergy",
                 Notes = "Prescribed antihistamines"
             },
-            new DiagnosticRecord
+            new Diagnose
             {
                 ID = diagnosis2Id,
                 PatientID = patientId,
-                Timestamp = diag2Timestamp,
+                CreatedAt = diag2Timestamp,
                 DiagnosisText = "Sinus Infection",
                 Notes = "Recommended antibiotics"
             }

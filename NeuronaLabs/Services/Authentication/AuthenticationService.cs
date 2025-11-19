@@ -69,7 +69,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (input.Diagnostic is not null)
         {
-            var diagnostic = new DiagnosticRecord
+            var diagnostic = new Diagnose
             {
                 DiagnosisText = input.Diagnostic.DiagnosisText,
                 Notes = input.Diagnostic.Notes,

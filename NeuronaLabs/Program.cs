@@ -65,6 +65,7 @@ app.UseAuthentication();
 
 app.UseCors();
 
-app.MapGraphQL();
+app.MapGraphQL()
+    .RequireAuthorization();
 
 app.Run();

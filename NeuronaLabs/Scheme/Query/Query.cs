@@ -1,4 +1,5 @@
-﻿using NeuronaLabs.Domain.Repositories.Patients;
+﻿using HotChocolate.Authorization;
+using NeuronaLabs.Domain.Repositories.Patients;
 using NeuronaLabs.DTOs.Responses;
 
 namespace NeuronaLabs.Scheme.Query;

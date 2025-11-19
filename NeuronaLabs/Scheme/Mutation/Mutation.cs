@@ -1,4 +1,5 @@
-﻿using NeuronaLabs.Domain.Repositories.Diagnose;
+﻿using HotChocolate.Authorization;
+using NeuronaLabs.Domain.Repositories.Diagnose;
 using NeuronaLabs.DTOs.Requests;
 using NeuronaLabs.DTOs.Responses;
 using NeuronaLabs.Services.Authentication;

@@ -10,5 +10,5 @@ public class Patient
     public required int Age { get; set; }
     public string? PasswordHash { get; set; } // setter private?
 
-    public List<DiagnosticRecord>? Diagnostics { get; set; } = [];
+    public List<Diagnose>? Diagnostics { get; set; } = [];
 }
