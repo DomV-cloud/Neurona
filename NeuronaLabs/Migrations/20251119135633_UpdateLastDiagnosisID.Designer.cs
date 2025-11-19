@@ -12,8 +12,8 @@ using NeuronaLabs.Database;
 namespace NeuronaLabs.Migrations
 {
     [DbContext(typeof(NeuronaLabsDbContext))]
-    [Migration("20251118222711_Init")]
-    partial class Init
+    [Migration("20251119135633_UpdateLastDiagnosisID")]
+    partial class UpdateLastDiagnosisID
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,24 @@ namespace NeuronaLabs.Migrations
                     b.HasIndex("PatientId");
 
                     b.ToTable("DiagnosticRecords");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = new Guid("22222222-2222-2222-2222-222222222222"),
+                            DiagnosisText = "Seasonal Allergy",
+                            Notes = "Prescribed antihistamines",
+                            PatientId = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Timestamp = new DateTimeOffset(new DateTime(2024, 1, 10, 9, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            ID = new Guid("33333333-3333-3333-3333-333333333333"),
+                            DiagnosisText = "Sinus Infection",
+                            Notes = "Recommended antibiotics",
+                            PatientId = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Timestamp = new DateTimeOffset(new DateTime(2024, 1, 15, 14, 30, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0))
+                        });
                 });
 
             modelBuilder.Entity("NeuronaLabs.Domain.Patient", b =>
@@ -76,6 +94,7 @@ namespace NeuronaLabs.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
@@ -83,12 +102,23 @@ namespace NeuronaLabs.Migrations
                     b.HasIndex("LastDiagnosisID");
 
                     b.ToTable("Patients");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Age = 34,
+                            Email = "alice.novak@example.com",
+                            FirstName = "Alice",
+                            LastName = "Novak",
+                            PasswordHash = "$2y$10$mZANmx707zBLu2aBdDqeJeYzGvnO2Og3IoxgApJQbe.UuFxmrVoz2"
+                        });
                 });
 
             modelBuilder.Entity("NeuronaLabs.Domain.DiagnosticRecord", b =>
                 {
                     b.HasOne("NeuronaLabs.Domain.Patient", "Patient")
-                        .WithMany("DiagnosticRecords")
+                        .WithMany("Diagnostics")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -108,7 +138,7 @@ namespace NeuronaLabs.Migrations
 
             modelBuilder.Entity("NeuronaLabs.Domain.Patient", b =>
                 {
-                    b.Navigation("DiagnosticRecords");
+                    b.Navigation("Diagnostics");
                 });
 #pragma warning restore 612, 618
         }

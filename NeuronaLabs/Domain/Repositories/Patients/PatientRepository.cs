@@ -17,9 +17,10 @@ public class PatientRepository : IPatientRepository
     {
         var query = _dbContext.Patients
          .AsNoTracking()
+         .Include(p => p.LastDiagnosis)
          .OrderBy(p => p.LastName)
          .ThenBy(p => p.FirstName);
-
+        
         var totalCount = await query.CountAsync(cancellationToken);
 
         var items = await query

@@ -13,7 +13,7 @@ public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Patient>()
-            .HasMany(p => p.DiagnosticRecords)
+            .HasMany(p => p.Diagnostics)
             .WithOne(dr => dr.Patient)
             .HasForeignKey(dr => dr.PatientId)
             .OnDelete(DeleteBehavior.Cascade);
@@ -24,31 +24,40 @@ public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
             .HasForeignKey(p => p.LastDiagnosisID)
             .OnDelete(DeleteBehavior.NoAction);
 
-        // Seed data
-        var patientId = Guid.Parse("8707d7e0-38ac-4fcb-aad5-6eb8ef986d45");
-        var diagnosisId = Guid.Parse("c56a4180-65aa-42ec-a945-5fd21dec0538");
-        var seedTimestamp = DateTime.Parse("2024-01-01T00:00:00Z");
+        var patientId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+        var diagnosis1Id = Guid.Parse("22222222-2222-2222-2222-222222222222");
+        var diagnosis2Id = Guid.Parse("33333333-3333-3333-3333-333333333333");
 
-        modelBuilder.Entity<Patient>()
-            .HasData(new Patient
-            {
-                ID = patientId,
-                FirstName = "John",
-                LastName = "Doe",
-                Age = 30,
-                Email = "john.doe@example.com",
-                PasswordHash = "$2y$10$pXLPBz7V.mSDHhm5nUp1ZeSvZYz7l3Ho61DJfoZsvlDXqhIKgDT5e", // Heslo123
-                LastDiagnosisID = diagnosisId
-            });
+        var diag1Timestamp = DateTimeOffset.Parse("2024-01-10T09:00:00Z");
+        var diag2Timestamp = DateTimeOffset.Parse("2024-01-15T14:30:00Z");
 
-        modelBuilder.Entity<DiagnosticRecord>()
-            .HasData(new DiagnosticRecord
+        modelBuilder.Entity<Patient>().HasData(new Patient
+        {
+            ID = patientId,
+            FirstName = "Alice",
+            LastName = "Novak",
+            Email = "alice.novak@example.com",
+            Age = 34,
+            PasswordHash = "$2y$10$mZANmx707zBLu2aBdDqeJeYzGvnO2Og3IoxgApJQbe.UuFxmrVoz2", // Heslo123
+        });
+
+        modelBuilder.Entity<DiagnosticRecord>().HasData(
+            new DiagnosticRecord
             {
-                ID = diagnosisId,
+                ID = diagnosis1Id,
                 PatientId = patientId,
-                Timestamp = seedTimestamp,
-                DiagnosisText = "Initial seeded diagnosis",
-                Notes = "Seed data"
-            });
+                Timestamp = diag1Timestamp,
+                DiagnosisText = "Seasonal Allergy",
+                Notes = "Prescribed antihistamines"
+            },
+            new DiagnosticRecord
+            {
+                ID = diagnosis2Id,
+                PatientId = patientId,
+                Timestamp = diag2Timestamp,
+                DiagnosisText = "Sinus Infection",
+                Notes = "Recommended antibiotics"
+            }
+        );
     }
 }
