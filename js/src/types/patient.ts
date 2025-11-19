@@ -3,7 +3,7 @@ export interface DiagnosticRecord {
   diagnosisText: string;
   timestamp: string;
   notes: string;
-  severity?: 'Low' | 'Medium' | 'High' | 'Critical';
+  severity?: "Low" | "Medium" | "High" | "Critical";
   category?: string;
   treatment?: string;
   followUpRequired?: boolean;
@@ -12,7 +12,7 @@ export interface DiagnosticRecord {
 
 export interface ExaminationImage {
   id: string;
-  type: 'MRI' | 'CT' | 'X-Ray' | 'Ultrasound' | 'Other';
+  type: "MRI" | "CT" | "X-Ray" | "Ultrasound" | "Other";
   url: string;
   description: string;
   timestamp: string;
@@ -105,7 +105,7 @@ export interface PatientDetails {
   email?: string;
   age: number;
   dateOfBirth?: string;
-  gender?: 'Male' | 'Female' | 'Other';
+  gender?: "Male" | "Female" | "Other";
   phone?: string;
   address?: string;
   bloodType?: string;
@@ -163,4 +163,31 @@ export interface UpdatePatientDiagnosisResponse {
 
 export interface UpdatePatientDiagnosisResult {
   updatedPatientDiagnose: UpdatePatientDiagnosisResponse;
+}
+
+// Registration Types
+export interface CreatePatientRequestInput {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  age: number;
+  diagnostic: {
+    diagnosisText: string;
+    notes: string;
+  };
+}
+
+// Keep the old interface for backward compatibility
+export interface RegisterPatientInput extends CreatePatientRequestInput {}
+
+export interface RegisterPatientResponse {
+  firstName: string;
+  lastName: string;
+  email: string;
+  token: string;
+}
+
+export interface RegisterPatientResult {
+  register: RegisterPatientResponse;
 }

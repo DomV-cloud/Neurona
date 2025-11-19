@@ -12,18 +12,24 @@ import {
 } from "../types/patient";
 import PatientList from "../components/patients/PatientList";
 import PatientForm from "../components/patients/PatientForm";
+import RegisterPatientForm from "../components/patients/RegisterPatientForm";
 
 function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showForm, setShowForm] = useState(false);
+  const [formType, setFormType] = useState<"register" | "comprehensive">(
+    "register"
+  );
 
   // Handle URL parameters for navigation
   useEffect(() => {
     const action = searchParams.get("action");
+    const type = searchParams.get("type") as "register" | "comprehensive";
 
     if (action === "add") {
       setShowForm(true);
+      setFormType(type || "register");
     } else {
       setShowForm(false);
     }
@@ -96,12 +102,20 @@ function HomeContent() {
               </p>
             </div>
             {!showForm ? (
-              <button
-                onClick={() => router.push("/?action=add")}
-                className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-sm font-medium"
-              >
-                Add New Patient
-              </button>
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => router.push("/?action=add&type=register")}
+                  className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow-sm font-medium"
+                >
+                  Register Patient
+                </button>
+                <button
+                  onClick={() => router.push("/?action=add&type=comprehensive")}
+                  className="px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 shadow-sm font-medium"
+                >
+                  Comprehensive Form
+                </button>
+              </div>
             ) : (
               <button
                 onClick={handleCancel}
@@ -116,15 +130,26 @@ function HomeContent() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {showForm ? (
-          <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-              Add New Patient
-            </h2>
-            <PatientForm
-              onSubmit={handleSubmit}
-              onCancel={handleCancel}
-              isLoading={creating || updating}
-            />
+          <div>
+            {formType === "register" ? (
+              <RegisterPatientForm
+                onSuccess={() => {
+                  router.push("/");
+                }}
+                onCancel={handleCancel}
+              />
+            ) : (
+              <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
+                <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+                  Comprehensive Patient Form
+                </h2>
+                <PatientForm
+                  onSubmit={handleSubmit}
+                  onCancel={handleCancel}
+                  isLoading={creating || updating}
+                />
+              </div>
+            )}
           </div>
         ) : (
           <PatientList />

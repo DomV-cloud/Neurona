@@ -2,11 +2,14 @@
 
 import { useState } from "react";
 import { useMutation } from "@apollo/client/react";
-import { UPDATE_PATIENT_DIAGNOSIS, GET_PATIENT } from "../../lib/graphql/queries";
-import { 
-  UpdatePatientDiagnoseRequestInput, 
+import {
+  UPDATE_PATIENT_DIAGNOSIS,
+  GET_PATIENT,
+} from "../../lib/graphql/queries";
+import {
+  UpdatePatientDiagnoseRequestInput,
   UpdatePatientDiagnosisResult,
-  DiagnosticRecord 
+  DiagnosticRecord,
 } from "../../types/patient";
 import { X, Save, Loader2, Edit3 } from "lucide-react";
 
@@ -26,9 +29,8 @@ export default function EditDiagnosisModal({
   const [diagnosisText, setDiagnosisText] = useState(diagnosis.diagnosisText);
   const [notes, setNotes] = useState(diagnosis.notes || "");
 
-  const [updateDiagnosis, { loading }] = useMutation<UpdatePatientDiagnosisResult>(
-    UPDATE_PATIENT_DIAGNOSIS,
-    {
+  const [updateDiagnosis, { loading }] =
+    useMutation<UpdatePatientDiagnosisResult>(UPDATE_PATIENT_DIAGNOSIS, {
       refetchQueries: [
         {
           query: GET_PATIENT,
@@ -42,8 +44,7 @@ export default function EditDiagnosisModal({
         console.error("Error updating diagnosis:", error);
         alert("Failed to update diagnosis. Please try again.");
       },
-    }
-  );
+    });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

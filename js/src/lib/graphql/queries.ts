@@ -89,3 +89,14 @@ export const UPDATE_PATIENT_DIAGNOSIS = gql`
     }
   }
 `;
+
+export const REGISTER_PATIENT = gql`
+  mutation RegisterPatient($input: CreatePatientRequestInput!) {
+    register(input: $input) {
+      firstName
+      lastName
+      email
+      token
+    }
+  }
+`;
