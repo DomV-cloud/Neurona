@@ -2,7 +2,7 @@
 
 public class Patient
 {
-    public Guid ID { get; private set; } = Guid.NewGuid();
+    public Guid ID { get; set; } = Guid.NewGuid(); // TODO: sett as private
 
     public required string FirstName { get; set; }
     public required string LastName { get; set; }

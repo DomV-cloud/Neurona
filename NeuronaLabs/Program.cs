@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NeuronaLabs;
 using NeuronaLabs.Database;
-using NeuronaLabs.Mutation;
-using NeuronaLabs.Query;
+using NeuronaLabs.Scheme.Mutation;
+using NeuronaLabs.Scheme.Query;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,12 +43,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                    ValidateAudience = true,
                    ValidateLifetime = true,
                    ValidateIssuerSigningKey = true,
-                   ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-                   ValidAudience = builder.Configuration["JwtSettings:Audience"],
+                   ValidIssuer = builder.Configuration["JwtTokenSettings:Issuer"],
+                   ValidAudience = builder.Configuration["JwtTokenSettings:Audience"],
                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                       builder.Configuration["JwtSettings:SecretKey"]))
+                       builder.Configuration["JwtTokenSettings:SecretKey"]))
                };
            });
+
+builder.Services.AddCustomOptions(builder.Configuration);
 
 var app = builder.Build();
 

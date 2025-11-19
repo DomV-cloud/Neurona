@@ -7,7 +7,7 @@ public class DiagnosticRecord
     public Guid PatientId { get; set; }
     public Patient Patient { get; set; } = null!;
 
-    public DateTimeOffset Timestamp { get; set; } = DateTimeOffset.UtcNow;
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public string DiagnosisText { get; set; } = null!;
 

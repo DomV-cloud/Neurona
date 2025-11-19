@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using NeuronaLabs.Authentication.JWT;
 using NeuronaLabs.Domain;
-using NeuronaLabs.Services;
+using NeuronaLabs.Domain.Repositories.Patients;
 using NeuronaLabs.Services.Authentication;
-using NeuronaLabs.Services.QueryServices;
 
 namespace NeuronaLabs;
 
@@ -13,11 +12,19 @@ public static class DependencyInjection
     {
         // Register services here
         services.AddScoped<IAuthenticationService, AuthenticationService>();
-        services.AddScoped<AuthenticationMutationService>();
-        services.AddScoped<AuthenticationQueryService>();
         services.AddScoped<IPasswordHasher<Patient>, PasswordHasher<Patient>>();
 
+        services.AddScoped<IPatientRepository, PatientRepository>();
+
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddCustomOptions(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<JwtTokenSettings>(configuration.GetSection(nameof(JwtTokenSettings)));
+
         return services;
     }
 }
