@@ -4,7 +4,7 @@ using NeuronaLabs.Authentication.JWT;
 using NeuronaLabs.Domain;
 using NeuronaLabs.Domain.Repositories.Diagnoses;
 using NeuronaLabs.Domain.Repositories.Patients;
-using NeuronaLabs.Infrastructure.DomainsServices.Diagnoses;
+using NeuronaLabs.Infrastructure.Services.Diagnoses;
 using NeuronaLabs.Services.Authentication;
 
 namespace NeuronaLabs;

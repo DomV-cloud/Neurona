@@ -8,4 +8,5 @@ public interface IDiagnosisRepository
         CancellationToken cancellationToken
     );
     Task<Diagnosis> AddDiagnosisAsync(Diagnosis diagnosis, CancellationToken cancellationToken);
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

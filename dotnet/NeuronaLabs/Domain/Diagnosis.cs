@@ -14,7 +14,7 @@ public class Diagnosis(Guid patientID, string diagnosisText, string? notes)
 
     public string? Notes { get; private set; } = notes;
 
-    public void UpdateDiagnosis(string? newDiagnosis, string? newNotes = null)
+    public void UpdateDiagnosis(string newDiagnosis, string? newNotes = null)
     {
         SetDiagnosisText(newDiagnosis);
         if (newNotes is not null)
@@ -25,7 +25,7 @@ public class Diagnosis(Guid patientID, string diagnosisText, string? notes)
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    public void SetDiagnosisText(string? diagnosisText)
+    public void SetDiagnosisText(string diagnosisText)
     {
         if (string.IsNullOrWhiteSpace(diagnosisText))
             throw new ArgumentException("Diagnosis text cannot be empty.", nameof(diagnosisText));
@@ -33,11 +33,8 @@ public class Diagnosis(Guid patientID, string diagnosisText, string? notes)
         DiagnosisText = diagnosisText;
     }
 
-    public void SetNotes(string notes)
+    public void SetNotes(string? notes)
     {
-        if (string.IsNullOrWhiteSpace(notes))
-            throw new ArgumentException("Notes cannot be empty.", nameof(notes));
-
         Notes = notes;
     }
 

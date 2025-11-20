@@ -1,8 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.EntityFrameworkCore;
-using NeuronaLabs.Application.DTOs.Requests;
-using NeuronaLabs.Application.DTOs.Responses;
-using NeuronaLabs.Application.GraphQL.Types;
+﻿using Microsoft.EntityFrameworkCore;
 using NeuronaLabs.Infrastructure.Database;
 
 namespace NeuronaLabs.Domain.Repositories.Diagnoses;
@@ -40,5 +36,10 @@ public class DiagnosisRepository(NeuronaLabsDbContext dbContext) : IDiagnosisRep
             );
 
         return diagnosisToUpdate;
+    }
+
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

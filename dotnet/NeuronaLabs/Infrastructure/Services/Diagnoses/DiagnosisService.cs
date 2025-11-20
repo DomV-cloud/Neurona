@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NeuronaLabs.Application.DomainServices.Diagnoses;
+﻿using NeuronaLabs.Application.DomainServices.Diagnoses;
 using NeuronaLabs.Application.DTOs.Requests;
 using NeuronaLabs.Application.DTOs.Responses;
 using NeuronaLabs.Application.GraphQL.Inputs;
@@ -7,7 +6,7 @@ using NeuronaLabs.Application.GraphQL.Types;
 using NeuronaLabs.Domain;
 using NeuronaLabs.Domain.Repositories.Diagnoses;
 
-namespace NeuronaLabs.Infrastructure.DomainsServices.Diagnoses;
+namespace NeuronaLabs.Infrastructure.Services.Diagnoses;
 
 public class DiagnosisService(IDiagnosisRepository diagnosisRepository) : IDiagnosisService
 {
@@ -48,6 +47,8 @@ public class DiagnosisService(IDiagnosisRepository diagnosisRepository) : IDiagn
             );
 
         diagnosis.UpdateDiagnosis(request.DiagnosisText, request.Notes);
+
+        await _diagnosisRepository.SaveChangesAsync(cancellationToken);
 
         return new UpdatedPatientDiagnosisType(
             diagnosis.PatientID,
