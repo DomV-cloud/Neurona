@@ -12,7 +12,7 @@ using NeuronaLabs.Database;
 namespace NeuronaLabs.Migrations
 {
     [DbContext(typeof(NeuronaLabsDbContext))]
-    [Migration("20251119152810_Init")]
+    [Migration("20251120071052_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -31,6 +31,9 @@ namespace NeuronaLabs.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
                     b.Property<string>("DiagnosisText")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -38,15 +41,15 @@ namespace NeuronaLabs.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PatientId")
+                    b.Property<Guid>("PatientID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("Timestamp")
+                    b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("PatientId");
+                    b.HasIndex("PatientID");
 
                     b.ToTable("DiagnosticRecords");
 
@@ -54,18 +57,18 @@ namespace NeuronaLabs.Migrations
                         new
                         {
                             ID = new Guid("22222222-2222-2222-2222-222222222222"),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 1, 10, 9, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             DiagnosisText = "Seasonal Allergy",
                             Notes = "Prescribed antihistamines",
-                            PatientId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Timestamp = new DateTimeOffset(new DateTime(2024, 1, 10, 9, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0))
+                            PatientID = new Guid("11111111-1111-1111-1111-111111111111")
                         },
                         new
                         {
                             ID = new Guid("33333333-3333-3333-3333-333333333333"),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 1, 15, 14, 30, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             DiagnosisText = "Sinus Infection",
                             Notes = "Recommended antibiotics",
-                            PatientId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Timestamp = new DateTimeOffset(new DateTime(2024, 1, 15, 14, 30, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0))
+                            PatientID = new Guid("11111111-1111-1111-1111-111111111111")
                         });
                 });
 
@@ -113,7 +116,7 @@ namespace NeuronaLabs.Migrations
                 {
                     b.HasOne("NeuronaLabs.Domain.Patient", "Patient")
                         .WithMany("Diagnostics")
-                        .HasForeignKey("PatientId")
+                        .HasForeignKey("PatientID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

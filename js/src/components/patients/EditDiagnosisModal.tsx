@@ -148,15 +148,15 @@ export default function EditDiagnosisModal({
               />
             </div>
 
-            {/* Timestamp (Read-only) */}
+            {/* Created At (Read-only) */}
             <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
               <label className="flex items-center text-sm font-semibold text-gray-700 mb-3">
                 <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
-                Last Updated
+                Created At
               </label>
               <input
                 type="text"
-                value={new Date(diagnosis.timestamp).toLocaleString()}
+                value={new Date(diagnosis.createdAt).toLocaleString()}
                 disabled
                 className="w-full px-4 py-3 border border-gray-200 rounded-lg bg-purple-50 text-gray-700 cursor-not-allowed font-medium"
               />

@@ -45,7 +45,7 @@ public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
                 {
                     ID = diagnosis1Id,
                     PatientID = patientId,
-                    Timestamp = diag1Timestamp,
+                    CreatedAt = diag1Timestamp,
                     DiagnosisText = "Seasonal Allergy",
                     Notes = "Prescribed antihistamines",
                 },
@@ -53,7 +53,7 @@ public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
                 {
                     ID = diagnosis2Id,
                     PatientID = patientId,
-                    Timestamp = diag2Timestamp,
+                    CreatedAt = diag2Timestamp,
                     DiagnosisText = "Sinus Infection",
                     Notes = "Recommended antibiotics",
                 }

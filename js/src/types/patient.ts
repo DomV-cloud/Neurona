@@ -1,7 +1,7 @@
 export interface DiagnosticRecord {
   id: string;
   diagnosisText: string;
-  timestamp: string;
+  createdAt: string;
   notes: string;
   severity?: "Low" | "Medium" | "High" | "Critical";
   category?: string;
@@ -15,7 +15,7 @@ export interface ExaminationImage {
   type: "MRI" | "CT" | "X-Ray" | "Ultrasound" | "Other";
   url: string;
   description: string;
-  timestamp: string;
+  createdAt: string;
   bodyPart?: string;
 }
 
@@ -159,6 +159,7 @@ export interface UpdatePatientDiagnosisResponse {
   diagnosticID: string;
   diagnosisText: string;
   notes: string;
+  updatedAt: string;
 }
 
 export interface UpdatePatientDiagnosisResult {

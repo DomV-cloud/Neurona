@@ -142,7 +142,7 @@ function PatientDetailsContent() {
                 url: "/images/examinations/MRI Scann.png",
                 description:
                   "Axial FLAIR brain MRI demonstrating normal brain parenchyma with clear delineation of gray and white matter structures. No evidence of acute infarction, hemorrhage, or space-occupying lesions.",
-                timestamp: record.timestamp,
+                createdAt: record.createdAt,
                 bodyPart: "Brain",
               },
             ]
@@ -461,7 +461,7 @@ function PatientDetailsContent() {
                             </div>
                             <div className="flex items-center text-sm text-gray-600 mb-3">
                               <Calendar className="w-4 h-4 mr-1" />
-                              <span>{formatDate(record.timestamp)}</span>
+                              <span>{formatDate(record.createdAt)}</span>
                               {record.followUpRequired && (
                                 <>
                                   <span className="mx-2">•</span>
@@ -611,7 +611,7 @@ function PatientDetailsContent() {
                                         <span>
                                           Scan Date:{" "}
                                           {new Date(
-                                            image.timestamp
+                                            image.createdAt
                                           ).toLocaleDateString()}
                                         </span>
                                       </div>

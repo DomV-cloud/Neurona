@@ -25,7 +25,7 @@ public class DiagnoseRepository(NeuronaLabsDbContext dbContext) : IDiagnoseRepos
 
         diagnosticToUpdate.DiagnosisText = request.DiagnosisText;
         diagnosticToUpdate.Notes = request.Notes;
-        // TODO: Add property for updated timestamp if needed
+        diagnosticToUpdate.UpdatedAt = DateTimeOffset.UtcNow;
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
@@ -33,7 +33,8 @@ public class DiagnoseRepository(NeuronaLabsDbContext dbContext) : IDiagnoseRepos
             diagnosticToUpdate.PatientID,
             diagnosticToUpdate.ID,
             diagnosticToUpdate.DiagnosisText,
-            diagnosticToUpdate.Notes
+            diagnosticToUpdate.Notes,
+            diagnosticToUpdate.UpdatedAt
         );
     }
 }

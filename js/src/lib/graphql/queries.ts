@@ -14,7 +14,7 @@ export const GET_PATIENTS = gql`
         lastDiagnosticRecord {
           id
           diagnosisText
-          timestamp
+          createdAt
           notes
         }
       }
@@ -32,7 +32,7 @@ export const GET_PATIENT = gql`
       diagnosticRecords {
         id
         diagnosisText
-        timestamp
+        createdAt
         notes
       }
     }
@@ -49,7 +49,7 @@ export const CREATE_PATIENT = gql`
       lastDiagnosticRecord {
         id
         diagnosisText
-        timestamp
+        createdAt
         notes
       }
     }
@@ -66,7 +66,7 @@ export const UPDATE_PATIENT = gql`
       lastDiagnosticRecord {
         id
         diagnosisText
-        timestamp
+        createdAt
         notes
       }
     }
@@ -86,6 +86,7 @@ export const UPDATE_PATIENT_DIAGNOSIS = gql`
       diagnosticID
       diagnosisText
       notes
+      updatedAt
     }
   }
 `;

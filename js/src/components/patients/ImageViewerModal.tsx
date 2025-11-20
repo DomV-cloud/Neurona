@@ -44,7 +44,7 @@ export default function ImageViewerModal({
                 {image.bodyPart} {image.type} Scan
               </h2>
               <p className="text-sm text-gray-600">
-                {new Date(image.timestamp).toLocaleDateString()} •{" "}
+                {new Date(image.createdAt).toLocaleDateString()} •{" "}
                 {image.description}
               </p>
             </div>
@@ -87,7 +87,7 @@ export default function ImageViewerModal({
             onClick={() => {
               const link = document.createElement("a");
               link.href = image.url;
-              link.download = `${image.bodyPart}_${image.type}_${image.timestamp}.jpg`;
+              link.download = `${image.bodyPart}_${image.type}_${image.createdAt}.jpg`;
               link.click();
             }}
             className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -130,7 +130,7 @@ export default function ImageViewerModal({
             <div>
               <label className="font-medium text-gray-700">Scan Date:</label>
               <p className="text-gray-600">
-                {new Date(image.timestamp).toLocaleString()}
+                {new Date(image.createdAt).toLocaleString()}
               </p>
             </div>
           </div>

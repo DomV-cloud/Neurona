@@ -41,7 +41,7 @@ export default function PatientCard({ patient }: PatientCardProps) {
             {patient.lastDiagnosticRecord.diagnosisText}
           </p>
           <p className="text-xs text-gray-600 mb-2">
-            {formatDate(patient.lastDiagnosticRecord.timestamp)}
+            {formatDate(patient.lastDiagnosticRecord.createdAt)}
           </p>
           <p className="text-sm text-gray-700">
             {patient.lastDiagnosticRecord.notes}
