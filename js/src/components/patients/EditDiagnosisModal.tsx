@@ -56,7 +56,7 @@ export default function EditDiagnosisModal({
 
     const input: UpdatePatientDiagnoseRequestInput = {
       patientID: patientId,
-      diagnoseID: diagnosis.id,
+      diagnosisID: diagnosis.id,
       diagnosisText: diagnosisText.trim(),
       notes: notes.trim(),
     };

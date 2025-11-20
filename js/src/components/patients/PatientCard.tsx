@@ -43,9 +43,7 @@ export default function PatientCard({ patient }: PatientCardProps) {
           <p className="text-xs text-gray-600 mb-2">
             {formatDate(patient.lastDiagnosis.createdAt)}
           </p>
-          <p className="text-sm text-gray-700">
-            {patient.lastDiagnosis.notes}
-          </p>
+          <p className="text-sm text-gray-700">{patient.lastDiagnosis.notes}</p>
         </div>
       )}
 

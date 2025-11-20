@@ -149,7 +149,7 @@ export interface DeletePatientResponse {
 // Update Diagnosis Types
 export interface UpdatePatientDiagnoseRequestInput {
   patientID: string;
-  diagnoseID: string;
+  diagnosisID: string;
   diagnosisText: string;
   notes: string;
 }
@@ -173,10 +173,6 @@ export interface CreatePatientRequestInput {
   email: string;
   password: string;
   age: number;
-  diagnostic: {
-    diagnosisText: string;
-    notes: string;
-  };
 }
 
 // Keep the old interface for backward compatibility

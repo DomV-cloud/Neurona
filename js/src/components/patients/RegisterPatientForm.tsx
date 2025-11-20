@@ -34,10 +34,6 @@ export default function RegisterPatientForm({
     email: "",
     password: "",
     age: 18,
-    diagnostic: {
-      diagnosisText: "",
-      notes: "",
-    },
   });
 
   const [registerPatient, { loading, error }] =
@@ -83,11 +79,6 @@ export default function RegisterPatientForm({
       return;
     }
 
-    if (!formData.diagnostic.diagnosisText.trim()) {
-      alert("Diagnosis text is required");
-      return;
-    }
-
     try {
       await registerPatient({
         variables: {
@@ -96,10 +87,6 @@ export default function RegisterPatientForm({
             firstName: formData.firstName.trim(),
             lastName: formData.lastName.trim(),
             email: formData.email.trim().toLowerCase(),
-            diagnostic: {
-              diagnosisText: formData.diagnostic.diagnosisText.trim(),
-              notes: formData.diagnostic.notes.trim(),
-            },
           },
         },
       });
@@ -110,19 +97,6 @@ export default function RegisterPatientForm({
 
   const updateField = (field: keyof CreatePatientRequestInput, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const updateDiagnosis = (
-    field: keyof CreatePatientRequestInput["diagnostic"],
-    value: string
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      diagnostic: {
-        ...prev.diagnostic,
-        [field]: value,
-      },
-    }));
   };
 
   return (
@@ -211,43 +185,6 @@ export default function RegisterPatientForm({
             placeholder="Enter secure password (min 6 characters)"
             helperText="Password must be at least 6 characters long"
           />
-        </div>
-
-        {/* Initial Diagnosis */}
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-            <Stethoscope className="w-5 h-5 mr-2 text-purple-600" />
-            Initial Diagnosis
-          </h3>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Diagnosis Text *
-              </label>
-              <input
-                type="text"
-                required
-                value={formData.diagnostic.diagnosisText}
-                onChange={(e) =>
-                  updateDiagnosis("diagnosisText", e.target.value)
-                }
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300 text-gray-900 placeholder-gray-500"
-                placeholder="e.g., Migraine, Hypertension, etc."
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Clinical Notes
-              </label>
-              <textarea
-                value={formData.diagnostic.notes}
-                onChange={(e) => updateDiagnosis("notes", e.target.value)}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300 text-gray-900 placeholder-gray-500"
-                placeholder="Additional notes about the patient's condition..."
-              />
-            </div>
-          </div>
         </div>
 
         {/* Actions */}

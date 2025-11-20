@@ -38,8 +38,9 @@ function PatientDetailsContent() {
   const params = useParams();
   const router = useRouter();
   const patientId = params.id as string;
-  const [editingDiagnosis, setEditingDiagnosis] =
-    useState<Diagnosis | null>(null);
+  const [editingDiagnosis, setEditingDiagnosis] = useState<Diagnosis | null>(
+    null
+  );
   const [viewingImage, setViewingImage] = useState<ExaminationImage | null>(
     null
   );
@@ -400,8 +401,7 @@ function PatientDetailsContent() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
               <Clock className="w-6 h-6 mr-2 text-indigo-600" />
-              Diagnosis Timeline ({mockPatientData.diagnoses.length}{" "}
-              records)
+              Diagnosis Timeline ({mockPatientData.diagnoses.length} records)
             </h2>
 
             {mockPatientData.diagnoses.length === 0 ? (

@@ -80,8 +80,8 @@ export const DELETE_PATIENT = gql`
 `;
 
 export const UPDATE_PATIENT_DIAGNOSIS = gql`
-  mutation UpdatePatientDiagnosis($input: UpdatePatientDiagnoseRequestInput!) {
-    updatedPatientDiagnose(input: $input) {
+  mutation UpdatePatientDiagnosis($input: UpdatePatientDiagnosisRequestInput!) {
+    updatedPatientDiagnosis(input: $input) {
       patientID
       diagnosisID
       diagnosisText
