@@ -30,11 +30,14 @@ import {
   Shield,
   Stethoscope,
   Plus,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { Suspense, useState } from "react";
 import EditDiagnosisModal from "../../../components/patients/EditDiagnosisModal";
 import ImageViewerModal from "../../../components/patients/ImageViewerModal";
 import CreateDiagnosisModal from "../../../components/patients/CreateDiagnosisModal";
+import HealthDashboard from "../../../components/ui/HealthDashboard";
 
 function PatientDetailsContent() {
   const params = useParams();
@@ -47,6 +50,7 @@ function PatientDetailsContent() {
     null
   );
   const [showCreateDiagnosis, setShowCreateDiagnosis] = useState(false);
+  const [isDiagnosisCollapsed, setIsDiagnosisCollapsed] = useState(false);
 
   const { data, loading, error, refetch } = useQuery<GetPatientType>(
     GET_PATIENT,
@@ -117,9 +121,14 @@ function PatientDetailsContent() {
     address: "123 Medical Center Dr, Health City, HC 12345",
     bloodType: "A+",
     allergies: ["Penicillin", "Shellfish"],
-    medications: ["Lisinopril 10mg", "Metformin 500mg", "Aspirin 81mg"],
+    medications: [
+      "Donepezil 10mg",
+      "Memantine 20mg",
+      "Vitamin E 400 IU",
+      "Ginkgo Biloba 120mg",
+    ],
     medicalHistory:
-      "Hypertension diagnosed 2020, Type 2 diabetes diagnosed 2021",
+      "Early-stage Alzheimer's Disease diagnosed 2023, Mild Cognitive Impairment identified 2022, Family history of dementia",
     emergencyContact: {
       name: "Jane Doe",
       relationship: "Spouse",
@@ -135,13 +144,18 @@ function PatientDetailsContent() {
     },
     diagnoses: patient.diagnoses.map((record, index) => ({
       ...record,
-      severity: (index % 4 === 0
-        ? "High"
-        : index % 3 === 0
-        ? "Medium"
-        : "Low") as "Low" | "Medium" | "High" | "Critical",
-      category: index % 2 === 0 ? "Neurology" : "Cardiology",
-      treatment: `Treatment plan ${index + 1}`,
+      severity: (index === 0 ? "High" : index === 1 ? "Medium" : "Low") as
+        | "Low"
+        | "Medium"
+        | "High"
+        | "Critical",
+      category: "Neurology - Memory Disorders",
+      treatment:
+        index === 0
+          ? "Donepezil therapy initiated, cognitive rehabilitation program"
+          : index === 1
+          ? "Memory enhancement exercises, lifestyle modifications"
+          : "Continued monitoring, family support counseling",
       followUpRequired: index % 3 === 0,
       examinationImages:
         index === 0
@@ -347,6 +361,23 @@ function PatientDetailsContent() {
             </div>
           </div>
 
+          {/* Health Monitoring Dashboard */}
+          <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+            <HealthDashboard
+              title="Cognitive Assessment (MMSE Score)"
+              metrics={[
+                { date: "2024-09-15", value: 28, status: "normal" },
+                { date: "2024-10-15", value: 26, status: "elevated" },
+                { date: "2024-10-29", value: 24, status: "elevated" },
+                { date: "2024-11-05", value: 22, status: "high" },
+                { date: "2024-11-12", value: 20, status: "high" },
+                { date: "2024-11-19", value: 18, status: "high" },
+              ]}
+              unit="/30"
+              normalRange={{ min: 24, max: 30 }}
+            />
+          </div>
+
           {/* Medical Information */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Allergies & Medications */}
@@ -409,10 +440,21 @@ function PatientDetailsContent() {
           {/* Diagnosis Timeline */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 flex items-center">
-                <Clock className="w-6 h-6 mr-2 text-indigo-600" />
-                Diagnosis Timeline ({mockPatientData.diagnoses.length} records)
-              </h2>
+              <button
+                onClick={() => setIsDiagnosisCollapsed(!isDiagnosisCollapsed)}
+                className="flex items-center space-x-2 text-xl font-semibold text-gray-900 hover:text-indigo-600 transition-colors"
+              >
+                <Clock className="w-6 h-6 text-indigo-600" />
+                <span>
+                  Diagnosis Timeline ({mockPatientData.diagnoses.length}{" "}
+                  records)
+                </span>
+                {isDiagnosisCollapsed ? (
+                  <ChevronDown className="w-5 h-5 text-gray-500" />
+                ) : (
+                  <ChevronUp className="w-5 h-5 text-gray-500" />
+                )}
+              </button>
               <button
                 onClick={() => setShowCreateDiagnosis(true)}
                 className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
@@ -423,227 +465,235 @@ function PatientDetailsContent() {
               </button>
             </div>
 
-            {mockPatientData.diagnoses.length === 0 ? (
-              <div className="bg-gray-50 rounded-lg p-8 text-center">
-                <Stethoscope className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500 text-lg">
-                  No diagnosis records found
-                </p>
-                <p className="text-gray-400 text-sm mt-2">
-                  Diagnosis records will appear here once they are added to the
-                  patient's file.
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {mockPatientData.diagnoses.map((record, index) => (
-                  <div key={record.id} className="relative">
-                    {/* Timeline line */}
-                    {index < mockPatientData.diagnoses.length - 1 && (
-                      <div className="absolute left-6 top-16 w-0.5 h-full bg-gray-200"></div>
-                    )}
+            <div
+              className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                isDiagnosisCollapsed
+                  ? "max-h-0 opacity-0"
+                  : "max-h-[5000px] opacity-100"
+              }`}
+            >
+              {mockPatientData.diagnoses.length === 0 ? (
+                <div className="bg-gray-50 rounded-lg p-8 text-center">
+                  <Stethoscope className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500 text-lg">
+                    No diagnosis records found
+                  </p>
+                  <p className="text-gray-400 text-sm mt-2">
+                    Diagnosis records will appear here once they are added to
+                    the patient's file.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {mockPatientData.diagnoses.map((record, index) => (
+                    <div key={record.id} className="relative">
+                      {/* Timeline line */}
+                      {index < mockPatientData.diagnoses.length - 1 && (
+                        <div className="absolute left-6 top-16 w-0.5 h-full bg-gray-200"></div>
+                      )}
 
-                    <div className="flex items-start space-x-4">
-                      {/* Timeline dot */}
-                      <div
-                        className={`w-12 h-12 rounded-full flex items-center justify-center ${getSeverityColor(
-                          record.severity
-                        )} border-2`}
-                      >
-                        <span className="text-xs font-bold">
-                          #{mockPatientData.diagnoses.length - index}
-                        </span>
-                      </div>
-
-                      {/* Content */}
-                      <div className="flex-1 bg-gray-50 rounded-xl p-6">
-                        <div className="flex justify-between items-start mb-4">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <h3 className="font-semibold text-gray-900 text-lg">
-                                {record.diagnosisText}
-                              </h3>
-                              <span
-                                className={`px-3 py-1 rounded-full text-xs font-medium border ${getSeverityColor(
-                                  record.severity
-                                )}`}
-                              >
-                                {record.severity}
-                              </span>
-                              {record.category && (
-                                <span className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                  {record.category}
-                                </span>
-                              )}
-                            </div>
-                            <div className="flex items-center text-sm text-gray-600 mb-3">
-                              <Calendar className="w-4 h-4 mr-1" />
-                              <span>{formatDate(record.createdAt)}</span>
-                              {record.followUpRequired && (
-                                <>
-                                  <span className="mx-2">•</span>
-                                  <TrendingUp className="w-4 h-4 mr-1 text-orange-500" />
-                                  <span className="text-orange-600">
-                                    Follow-up required
-                                  </span>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                          <button
-                            onClick={() => setEditingDiagnosis(record)}
-                            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
-                            title="Edit diagnosis"
-                          >
-                            <Edit3 className="w-4 h-4" />
-                          </button>
+                      <div className="flex items-start space-x-4">
+                        {/* Timeline dot */}
+                        <div
+                          className={`w-12 h-12 rounded-full flex items-center justify-center ${getSeverityColor(
+                            record.severity
+                          )} border-2`}
+                        >
+                          <span className="text-xs font-bold">
+                            #{mockPatientData.diagnoses.length - index}
+                          </span>
                         </div>
 
-                        {/* Notes */}
-                        {record.notes && (
-                          <div className="bg-white rounded-lg p-4 mb-4">
-                            <div className="flex items-center mb-2">
-                              <FileText className="w-4 h-4 text-gray-500 mr-2" />
-                              <span className="text-sm font-medium text-gray-700">
-                                Clinical Notes
-                              </span>
+                        {/* Content */}
+                        <div className="flex-1 bg-gray-50 rounded-xl p-6 transition-all duration-300 hover:bg-gray-100 hover:shadow-md">
+                          <div className="flex justify-between items-start mb-4">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-2">
+                                <h3 className="font-semibold text-gray-900 text-lg">
+                                  {record.diagnosisText}
+                                </h3>
+                                <span
+                                  className={`px-3 py-1 rounded-full text-xs font-medium border ${getSeverityColor(
+                                    record.severity
+                                  )}`}
+                                >
+                                  {record.severity}
+                                </span>
+                                {record.category && (
+                                  <span className="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                    {record.category}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="flex items-center text-sm text-gray-600 mb-3">
+                                <Calendar className="w-4 h-4 mr-1" />
+                                <span>{formatDate(record.createdAt)}</span>
+                                {record.followUpRequired && (
+                                  <>
+                                    <span className="mx-2">•</span>
+                                    <TrendingUp className="w-4 h-4 mr-1 text-orange-500" />
+                                    <span className="text-orange-600">
+                                      Follow-up required
+                                    </span>
+                                  </>
+                                )}
+                              </div>
                             </div>
-                            <p className="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">
-                              {record.notes}
-                            </p>
+                            <button
+                              onClick={() => setEditingDiagnosis(record)}
+                              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
+                              title="Edit diagnosis"
+                            >
+                              <Edit3 className="w-4 h-4" />
+                            </button>
                           </div>
-                        )}
 
-                        {/* Treatment */}
-                        {record.treatment && (
-                          <div className="bg-green-50 rounded-lg p-4 mb-4">
-                            <div className="flex items-center mb-2">
-                              <Shield className="w-4 h-4 text-green-600 mr-2" />
-                              <span className="text-sm font-medium text-green-700">
-                                Treatment Plan
-                              </span>
-                            </div>
-                            <p className="text-sm text-green-600">
-                              {record.treatment}
-                            </p>
-                          </div>
-                        )}
-
-                        {/* Examination Images */}
-                        {record.examinationImages &&
-                          record.examinationImages.length > 0 && (
-                            <div className="bg-white rounded-lg p-4">
-                              <div className="flex items-center mb-4">
-                                <ImageIcon className="w-4 h-4 text-blue-600 mr-2" />
-                                <span className="text-sm font-medium text-blue-700">
-                                  Examination Images
+                          {/* Notes */}
+                          {record.notes && (
+                            <div className="bg-white rounded-lg p-4 mb-4">
+                              <div className="flex items-center mb-2">
+                                <FileText className="w-4 h-4 text-gray-500 mr-2" />
+                                <span className="text-sm font-medium text-gray-700">
+                                  Clinical Notes
                                 </span>
                               </div>
-                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {record.examinationImages.map((image) => (
-                                  <div
-                                    key={image.id}
-                                    className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer group"
-                                    onClick={() => setViewingImage(image)}
-                                  >
-                                    <div className="aspect-square bg-gray-900 relative overflow-hidden">
-                                      <img
-                                        src={image.url}
-                                        alt={`${image.type} scan of ${image.bodyPart}`}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                        onLoad={() =>
-                                          console.log(
-                                            "Image loaded successfully:",
-                                            image.url
-                                          )
-                                        }
-                                        onError={(e) => {
-                                          console.log(
-                                            "Image failed to load:",
-                                            image.url
-                                          );
-                                          // Fallback to placeholder if image fails to load
-                                          const target =
-                                            e.target as HTMLImageElement;
-                                          target.style.display = "none";
-                                          target.nextElementSibling?.classList.remove(
-                                            "hidden"
-                                          );
-                                          target.nextElementSibling?.classList.add(
-                                            "flex"
-                                          );
-                                        }}
-                                      />
-                                      {/* Fallback placeholder */}
-                                      <div className="absolute inset-0 items-center justify-center text-center p-4 hidden">
-                                        <div>
-                                          <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                                          <p className="text-sm font-medium text-gray-600">
-                                            {image.type} Scan
-                                          </p>
-                                          <p className="text-xs text-gray-500">
-                                            {image.bodyPart}
-                                          </p>
-                                        </div>
-                                      </div>
-                                      {/* Image overlay with type badge */}
-                                      <div className="absolute top-2 left-2">
-                                        <span className="bg-black/70 text-white text-xs font-medium px-2 py-1 rounded-full backdrop-blur-sm">
-                                          {image.type}
-                                        </span>
-                                      </div>
-                                      {/* Zoom indicator */}
-                                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <span className="bg-blue-600 text-white p-1.5 rounded-full">
-                                          <svg
-                                            className="w-4 h-4"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                          >
-                                            <path
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                              strokeWidth={2}
-                                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
-                                            />
-                                          </svg>
-                                        </span>
-                                      </div>
-                                    </div>
-                                    <div className="p-4 bg-white">
-                                      <div className="flex items-center justify-between mb-2">
-                                        <h4 className="font-semibold text-gray-900 text-sm">
-                                          {image.bodyPart} {image.type}
-                                        </h4>
-                                        <span className="text-xs text-gray-500">
-                                          {formatDate(image.createdAt)}
-                                        </span>
-                                      </div>
-                                      <p className="text-sm text-gray-700 leading-relaxed mb-2">
-                                        {image.description}
-                                      </p>
-                                      <div className="flex items-center text-xs text-gray-500">
-                                        <Calendar className="w-3 h-3 mr-1" />
-                                        <span>
-                                          Scan Date:{" "}
-                                          {new Date(
-                                            image.createdAt
-                                          ).toLocaleDateString()}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
+                              <p className="text-sm text-gray-600 whitespace-pre-wrap leading-relaxed">
+                                {record.notes}
+                              </p>
                             </div>
                           )}
+
+                          {/* Treatment */}
+                          {record.treatment && (
+                            <div className="bg-green-50 rounded-lg p-4 mb-4">
+                              <div className="flex items-center mb-2">
+                                <Shield className="w-4 h-4 text-green-600 mr-2" />
+                                <span className="text-sm font-medium text-green-700">
+                                  Treatment Plan
+                                </span>
+                              </div>
+                              <p className="text-sm text-green-600">
+                                {record.treatment}
+                              </p>
+                            </div>
+                          )}
+
+                          {/* Examination Images */}
+                          {record.examinationImages &&
+                            record.examinationImages.length > 0 && (
+                              <div className="bg-white rounded-lg p-4">
+                                <div className="flex items-center mb-4">
+                                  <ImageIcon className="w-4 h-4 text-blue-600 mr-2" />
+                                  <span className="text-sm font-medium text-blue-700">
+                                    Examination Images
+                                  </span>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                  {record.examinationImages.map((image) => (
+                                    <div
+                                      key={image.id}
+                                      className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer group"
+                                      onClick={() => setViewingImage(image)}
+                                    >
+                                      <div className="aspect-square bg-gray-900 relative overflow-hidden">
+                                        <img
+                                          src={image.url}
+                                          alt={`${image.type} scan of ${image.bodyPart}`}
+                                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                          onLoad={() =>
+                                            console.log(
+                                              "Image loaded successfully:",
+                                              image.url
+                                            )
+                                          }
+                                          onError={(e) => {
+                                            console.log(
+                                              "Image failed to load:",
+                                              image.url
+                                            );
+                                            // Fallback to placeholder if image fails to load
+                                            const target =
+                                              e.target as HTMLImageElement;
+                                            target.style.display = "none";
+                                            target.nextElementSibling?.classList.remove(
+                                              "hidden"
+                                            );
+                                            target.nextElementSibling?.classList.add(
+                                              "flex"
+                                            );
+                                          }}
+                                        />
+                                        {/* Fallback placeholder */}
+                                        <div className="absolute inset-0 items-center justify-center text-center p-4 hidden">
+                                          <div>
+                                            <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                                            <p className="text-sm font-medium text-gray-600">
+                                              {image.type} Scan
+                                            </p>
+                                            <p className="text-xs text-gray-500">
+                                              {image.bodyPart}
+                                            </p>
+                                          </div>
+                                        </div>
+                                        {/* Image overlay with type badge */}
+                                        <div className="absolute top-2 left-2">
+                                          <span className="bg-black/70 text-white text-xs font-medium px-2 py-1 rounded-full backdrop-blur-sm">
+                                            {image.type}
+                                          </span>
+                                        </div>
+                                        {/* Zoom indicator */}
+                                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                          <span className="bg-blue-600 text-white p-1.5 rounded-full">
+                                            <svg
+                                              className="w-4 h-4"
+                                              fill="none"
+                                              stroke="currentColor"
+                                              viewBox="0 0 24 24"
+                                            >
+                                              <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+                                              />
+                                            </svg>
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <div className="p-4 bg-white">
+                                        <div className="flex items-center justify-between mb-2">
+                                          <h4 className="font-semibold text-gray-900 text-sm">
+                                            {image.bodyPart} {image.type}
+                                          </h4>
+                                          <span className="text-xs text-gray-500">
+                                            {formatDate(image.createdAt)}
+                                          </span>
+                                        </div>
+                                        <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                                          {image.description}
+                                        </p>
+                                        <div className="flex items-center text-xs text-gray-500">
+                                          <Calendar className="w-3 h-3 mr-1" />
+                                          <span>
+                                            Scan Date:{" "}
+                                            {new Date(
+                                              image.createdAt
+                                            ).toLocaleDateString()}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </main>

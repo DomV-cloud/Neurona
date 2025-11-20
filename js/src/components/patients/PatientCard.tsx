@@ -29,9 +29,7 @@ export default function PatientCard({ patient }: PatientCardProps) {
         <h3 className="text-xl font-semibold text-gray-900">
           {patient.firstName} {patient.lastName}
         </h3>
-        <p className="text-sm text-gray-500 mt-1">
-          Age: {patient.age} • ID: {patient.patientID}
-        </p>
+        <p className="text-sm text-gray-500 mt-1">Age: {patient.age}</p>
       </div>
 
       {patient.lastDiagnosis && (
