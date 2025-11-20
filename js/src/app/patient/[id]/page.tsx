@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/client/react";
 import { useParams, useRouter } from "next/navigation";
 import { GET_PATIENT } from "../../../lib/graphql/queries";
 import {
-  GetPatientResponse,
+  GetPatientType,
   Diagnosis,
   ExaminationImage,
 } from "../../../types/patient";
@@ -48,7 +48,7 @@ function PatientDetailsContent() {
   );
   const [showCreateDiagnosis, setShowCreateDiagnosis] = useState(false);
 
-  const { data, loading, error, refetch } = useQuery<GetPatientResponse>(
+  const { data, loading, error, refetch } = useQuery<GetPatientType>(
     GET_PATIENT,
     {
       variables: { patientId },

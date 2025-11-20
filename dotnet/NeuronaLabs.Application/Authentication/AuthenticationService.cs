@@ -1,0 +1,87 @@
+﻿using Microsoft.AspNetCore.Identity;
+using NeuronaLabs.Application.Authentication.JWT;
+using NeuronaLabs.Application.GraphQL.Inputs;
+using NeuronaLabs.Application.GraphQL.Types;
+using NeuronaLabs.Domain.Patients;
+
+namespace NeuronaLabs.Application.Authentication;
+
+public class AuthenticationService(
+    IPatientRepository patientRepository,
+    IJwtTokenGenerator jwtTokenGenerator,
+    IPasswordHasher<Patient> passwordHasher
+) : IAuthenticationService
+{
+    private readonly IPatientRepository _patientRepository = patientRepository;
+    private readonly IJwtTokenGenerator _jwtTokenGenerator = jwtTokenGenerator;
+    private readonly IPasswordHasher<Patient> _passwordHasher = passwordHasher;
+
+    public async Task<GetLoginType> LoginAsync(LoginType input, CancellationToken cancellationToken)
+    {
+        var patient =
+            await _patientRepository.GetPatientByEmailAsync(input.Email, cancellationToken)
+            ?? throw new InvalidOperationException("Invalid email or password.");
+
+        var result = _passwordHasher.VerifyHashedPassword(
+            patient,
+            patient.PasswordHash,
+            input.Password
+        );
+        if (result == PasswordVerificationResult.Failed)
+        {
+            throw new InvalidOperationException("Invalid email or password.");
+        }
+
+        var token = _jwtTokenGenerator.GenerateToken(patient);
+
+        if (string.IsNullOrEmpty(token))
+        {
+            throw new InvalidOperationException("Could not generate JWT token.");
+        }
+
+        return new GetLoginType(patient.FirstName, patient.LastName, patient.Email, token);
+    }
+
+    public async Task<RegisteredPatientType> RegisterAsync(
+        CreatePatientInput input,
+        CancellationToken cancellationToken
+    )
+    {
+        var normalizedEmail = NormalizeEmail(input.Email);
+
+        var userExists = await _patientRepository.GetPatientByEmailAsync(
+            normalizedEmail,
+            cancellationToken
+        );
+        if (userExists != null)
+        {
+            throw new InvalidOperationException(
+                $"User with this email '{input.Email}' already exists."
+            );
+        }
+
+        var patient = new Patient(input.FirstName, input.LastName, normalizedEmail, input.Age);
+
+        patient.SetPasswordHash(_passwordHasher.HashPassword(patient, input.Password));
+
+        var createdPatient = await _patientRepository.CreatePatientAsync(
+            patient,
+            cancellationToken
+        );
+
+        var token = _jwtTokenGenerator.GenerateToken(createdPatient);
+        if (string.IsNullOrEmpty(token))
+        {
+            throw new InvalidOperationException("Could not generate JWT token.");
+        }
+
+        return new RegisteredPatientType(
+            createdPatient.FirstName,
+            createdPatient.LastName,
+            createdPatient.Email,
+            token
+        );
+    }
+
+    private string NormalizeEmail(string email) => email.Trim().ToLowerInvariant();
+}

@@ -7,7 +7,7 @@ import {
   GET_PATIENT,
 } from "../../lib/graphql/queries";
 import {
-  UpdatePatientDiagnoseRequestInput,
+  UpdatePatientDiagnosisInput,
   UpdatePatientDiagnosisResult,
   Diagnosis,
 } from "../../types/patient";
@@ -54,7 +54,7 @@ export default function EditDiagnosisModal({
       return;
     }
 
-    const input: UpdatePatientDiagnoseRequestInput = {
+    const input: UpdatePatientDiagnosisInput = {
       patientID: patientId,
       diagnosisID: diagnosis.id,
       diagnosisText: diagnosisText.trim(),

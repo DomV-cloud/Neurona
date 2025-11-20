@@ -89,7 +89,7 @@ export const CREATE_DIAGNOSIS = gql`
 `;
 
 export const UPDATE_PATIENT_DIAGNOSIS = gql`
-  mutation UpdatePatientDiagnosis($input: UpdatePatientDiagnosisRequestInput!) {
+  mutation UpdatePatientDiagnosis($input: UpdatePatientDiagnosisInput!) {
     updatedPatientDiagnosis(input: $input) {
       patientID
       diagnosisID
@@ -101,7 +101,7 @@ export const UPDATE_PATIENT_DIAGNOSIS = gql`
 `;
 
 export const REGISTER_PATIENT = gql`
-  mutation RegisterPatient($input: CreatePatientRequestInput!) {
+  mutation RegisterPatient($input: CreatePatientInput!) {
     register(input: $input) {
       firstName
       lastName

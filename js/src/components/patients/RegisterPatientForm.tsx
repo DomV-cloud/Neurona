@@ -4,7 +4,7 @@ import { useState, FormEvent } from "react";
 import { useMutation } from "@apollo/client/react";
 import { REGISTER_PATIENT, GET_PATIENTS } from "../../lib/graphql/queries";
 import {
-  CreatePatientRequestInput,
+  RegisterPatientInput,
   RegisterPatientResult,
 } from "../../types/patient";
 import { Input } from "../ui/Input";
@@ -28,7 +28,7 @@ export default function RegisterPatientForm({
   onSuccess,
   onCancel,
 }: RegisterPatientFormProps) {
-  const [formData, setFormData] = useState<CreatePatientRequestInput>({
+  const [formData, setFormData] = useState<RegisterPatientInput>({
     firstName: "",
     lastName: "",
     email: "",
@@ -95,7 +95,7 @@ export default function RegisterPatientForm({
     }
   };
 
-  const updateField = (field: keyof CreatePatientRequestInput, value: any) => {
+  const updateField = (field: keyof RegisterPatientInput, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 

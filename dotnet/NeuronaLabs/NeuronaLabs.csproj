@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Services\Patients\" />
+    <ProjectReference Include="..\NeuronaLabs.Application\NeuronaLabs.Application.csproj" />
+    <ProjectReference Include="..\NeuronaLabs.Infrastructure\NeuronaLabs.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

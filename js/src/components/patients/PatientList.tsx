@@ -2,13 +2,13 @@
 
 import { useQuery } from "@apollo/client/react";
 import { GET_PATIENTS } from "../../lib/graphql/queries";
-import { Patient, GetPatientsResponse } from "../../types/patient";
+import { Patient, GetPatientsType } from "../../types/patient";
 import PatientCard from "./PatientCard";
 
 interface PatientListProps {}
 
 export default function PatientList() {
-  const { data, loading, error, refetch } = useQuery<GetPatientsResponse>(
+  const { data, loading, error, refetch } = useQuery<GetPatientsType>(
     GET_PATIENTS,
     {
       variables: { pageSize: 10, page: 1 },

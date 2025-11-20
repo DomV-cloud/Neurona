@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="NeuronaLabs.Application/NeuronaLabs.Application.csproj" Id="c4ed75ed-6cf1-4ad4-9f12-794fc2578db1" />
+  <Project Path="NeuronaLabs.Domain/NeuronaLabs.Domain.csproj" Id="71658e9a-f478-4287-80e8-e20febc8fdc8" />
+  <Project Path="NeuronaLabs.Infrastructure/NeuronaLabs.Infrastructure.csproj" Id="da4daf5f-1fe5-437d-af9c-a82754cb59fb" />
   <Project Path="NeuronaLabs/NeuronaLabs.csproj" />
 </Solution>

@@ -87,16 +87,16 @@ export interface UpdatePatientInput {
 }
 
 // Pagination types
-export interface PaginatedResponse<T> {
+export interface PaginatedType<T> {
   page: number;
   pageSize: number;
   totalCount: number;
   items: T[];
 }
 
-// GraphQL Query Response Types
-export interface GetPatientsResponse {
-  all: PaginatedResponse<Patient>;
+// GraphQL Query Types
+export interface GetPatientsType {
+  all: PaginatedType<Patient>;
 }
 
 export interface PatientDetails {
@@ -130,19 +130,19 @@ export interface VitalSigns {
   lastUpdated?: string;
 }
 
-export interface GetPatientResponse {
+export interface GetPatientType {
   patientDetails: PatientDetails;
 }
 
-export interface CreatePatientResponse {
+export interface CreatePatientType {
   createPatient: Patient;
 }
 
-export interface UpdatePatientResponse {
+export interface UpdatePatientType {
   updatePatient: Patient;
 }
 
-export interface DeletePatientResponse {
+export interface DeletePatientType {
   deletePatient: boolean;
 }
 
@@ -153,21 +153,21 @@ export interface CreateDiagnosisInput {
   notes: string;
 }
 
-export interface CreateDiagnosisResponse {
+export interface CreateDiagnosisInput {
   patientID: string;
   notes: string;
 }
 
 export interface CreateDiagnosisResult {
-  createDiagnosis: CreateDiagnosisResponse;
+  createDiagnosis: CreateDiagnosisInput;
 }
 
 // Update Diagnosis Types
-export interface UpdatePatientDiagnoseRequestInput {
+export interface UpdatePatientDiagnosisInput {
   patientID: string;
   diagnosisID: string;
-  diagnosisText: string;
-  notes: string;
+  diagnosisText?: string;
+  notes?: string;
 }
 
 export interface UpdatePatientDiagnosisResponse {
@@ -183,16 +183,13 @@ export interface UpdatePatientDiagnosisResult {
 }
 
 // Registration Types
-export interface CreatePatientRequestInput {
+export interface RegisterPatientInput {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
   age: number;
 }
-
-// Keep the old interface for backward compatibility
-export interface RegisterPatientInput extends CreatePatientRequestInput {}
 
 export interface RegisterPatientResponse {
   firstName: string;

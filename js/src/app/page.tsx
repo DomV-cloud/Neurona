@@ -7,8 +7,8 @@ import { CREATE_PATIENT, UPDATE_PATIENT } from "../lib/graphql/queries";
 import {
   CreatePatientInput,
   UpdatePatientInput,
-  CreatePatientResponse,
-  UpdatePatientResponse,
+  CreatePatientType,
+  UpdatePatientType,
 } from "../types/patient";
 import PatientList from "../components/patients/PatientList";
 import PatientForm from "../components/patients/PatientForm";
@@ -35,20 +35,24 @@ function HomeContent() {
     }
   }, [searchParams]);
 
-  const [createPatient, { loading: creating }] =
-    useMutation<CreatePatientResponse>(CREATE_PATIENT, {
+  const [createPatient, { loading: creating }] = useMutation<CreatePatientType>(
+    CREATE_PATIENT,
+    {
       refetchQueries: ["GetPatients"],
       onCompleted: () => {
         router.push("/");
       },
-    });
-  const [updatePatient, { loading: updating }] =
-    useMutation<UpdatePatientResponse>(UPDATE_PATIENT, {
+    }
+  );
+  const [updatePatient, { loading: updating }] = useMutation<UpdatePatientType>(
+    UPDATE_PATIENT,
+    {
       refetchQueries: ["GetPatients"],
       onCompleted: () => {
         router.push("/");
       },
-    });
+    }
+  );
 
   const handleCreate = async (input: CreatePatientInput) => {
     try {

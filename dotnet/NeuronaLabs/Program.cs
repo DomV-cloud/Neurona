@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NeuronaLabs;
+using NeuronaLabs.Application;
 using NeuronaLabs.Application.GraphQL.Mutations.Diagnoses;
 using NeuronaLabs.Application.GraphQL.Mutations.Patients;
 using NeuronaLabs.Application.GraphQL.Queries.Patients;
+using NeuronaLabs.Infrastructure;
 using NeuronaLabs.Infrastructure.Database;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,8 +22,6 @@ builder
     .AddQueryType<PatientQuery>()
     .AddMutationType<PatientMutation>()
     .AddType<DiagnosisMutation>();
-
-builder.Services.AddNeuronaLabsServices();
 
 builder.Services.AddDbContext<NeuronaLabsDbContext>(options =>
 {
@@ -58,20 +58,9 @@ builder
         };
     });
 
-builder.Services.AddCustomOptions(builder.Configuration).AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration).AddApplication();
 
 var app = builder.Build();
-
-app.MapGet("/debug-conn", (IConfiguration config) =>
-{
-    var cs = config.GetConnectionString("sqlConnection")
-             ?? config["sqlConnection"]
-             ?? "NULL";
-
-    // jen abys náhodou nevypsal heslo pøímo
-    return cs.Replace("Password=", "Password=***");
-});
-
 
 if (app.Environment.IsDevelopment())
 {
@@ -80,9 +69,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-
 app.UseCors();
+
+app.UseAuthentication();
 
 app.MapGraphQL();
 
