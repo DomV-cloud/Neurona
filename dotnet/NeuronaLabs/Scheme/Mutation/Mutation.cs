@@ -1,8 +1,8 @@
-﻿using NeuronaLabs.Domain.Repositories.Diagnose;
-using NeuronaLabs.DTOs.Requests;
-using NeuronaLabs.DTOs.Responses;
+﻿using NeuronaLabs.Application.DTOs.Requests;
+using NeuronaLabs.Application.DTOs.Responses;
+using NeuronaLabs.Domain.Repositories.Diagnose;
 using NeuronaLabs.Services.Authentication;
-using LoginRequest = NeuronaLabs.DTOs.Requests.LoginRequest;
+using LoginRequest = NeuronaLabs.Application.DTOs.Requests.LoginRequest;
 
 namespace NeuronaLabs.Scheme.Mutation;
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NeuronaLabs.Database;
-using NeuronaLabs.DTOs.Responses;
+using NeuronaLabs.Application.DTOs.Responses;
+using NeuronaLabs.Infrastructure.Database;
 
 namespace NeuronaLabs.Domain.Repositories.Patients;
 

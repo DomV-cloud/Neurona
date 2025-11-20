@@ -1,4 +1,4 @@
-﻿namespace NeuronaLabs.DTOs.Responses;
+﻿namespace NeuronaLabs.Application.DTOs.Responses;
 
 public record RegisteredPatientResponse(
     string FirstName,

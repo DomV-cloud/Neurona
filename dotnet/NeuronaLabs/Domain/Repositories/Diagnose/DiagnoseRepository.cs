@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NeuronaLabs.Database;
-using NeuronaLabs.DTOs.Requests;
-using NeuronaLabs.DTOs.Responses;
+using NeuronaLabs.Application.DTOs.Requests;
+using NeuronaLabs.Application.DTOs.Responses;
+using NeuronaLabs.Infrastructure.Database;
 
 namespace NeuronaLabs.Domain.Repositories.Diagnose;
 
@@ -23,9 +23,9 @@ public class DiagnoseRepository(NeuronaLabsDbContext dbContext) : IDiagnoseRepos
                 $"Patient with ID '{request.PatientID}' or Diagnosis with ID '{request.DiagnoseID}' was not found."
             );
 
-        diagnosticToUpdate.DiagnosisText = request.DiagnosisText;
-        diagnosticToUpdate.Notes = request.Notes;
-        diagnosticToUpdate.UpdatedAt = DateTimeOffset.UtcNow;
+        diagnosticToUpdate.SetDiagnosisText(request.DiagnosisText);
+        diagnosticToUpdate.SetNotes(request.Notes);
+        diagnosticToUpdate.SetUpdatedAt();
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NeuronaLabs;
-using NeuronaLabs.Database;
+using NeuronaLabs.Infrastructure.Database;
 using NeuronaLabs.Scheme.Mutation;
 using NeuronaLabs.Scheme.Query;
 

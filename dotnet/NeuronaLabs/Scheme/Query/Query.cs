@@ -1,5 +1,5 @@
-﻿using NeuronaLabs.Domain.Repositories.Patients;
-using NeuronaLabs.DTOs.Responses;
+﻿using NeuronaLabs.Application.DTOs.Responses;
+using NeuronaLabs.Domain.Repositories.Patients;
 
 namespace NeuronaLabs.Scheme.Query;
 

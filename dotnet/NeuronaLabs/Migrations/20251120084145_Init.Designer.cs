@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using NeuronaLabs.Database;
+using NeuronaLabs.Infrastructure.Database;
 
 #nullable disable
 
 namespace NeuronaLabs.Migrations
 {
     [DbContext(typeof(NeuronaLabsDbContext))]
-    [Migration("20251120071052_Init")]
+    [Migration("20251120084145_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -94,6 +94,7 @@ namespace NeuronaLabs.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");

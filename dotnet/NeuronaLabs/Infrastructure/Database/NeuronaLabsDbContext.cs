@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NeuronaLabs.Domain;
 
-namespace NeuronaLabs.Database;
+namespace NeuronaLabs.Infrastructure.Database;
 
 public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
 {
@@ -27,21 +27,21 @@ public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
         modelBuilder
             .Entity<Patient>()
             .HasData(
-                new Patient
+                new
                 {
                     ID = patientId,
                     FirstName = "Alice",
                     LastName = "Novak",
                     Email = "alice.novak@example.com",
                     Age = 34,
-                    PasswordHash = "$2y$10$mZANmx707zBLu2aBdDqeJeYzGvnO2Og3IoxgApJQbe.UuFxmrVoz2", // Heslo123
+                    PasswordHash = "$2y$10$mZANmx707zBLu2aBdDqeJeYzGvnO2Og3IoxgApJQbe.UuFxmrVoz2", //Heslo123
                 }
             );
 
         modelBuilder
             .Entity<DiagnosticRecord>()
             .HasData(
-                new DiagnosticRecord
+                new
                 {
                     ID = diagnosis1Id,
                     PatientID = patientId,
@@ -49,7 +49,7 @@ public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
                     DiagnosisText = "Seasonal Allergy",
                     Notes = "Prescribed antihistamines",
                 },
-                new DiagnosticRecord
+                new
                 {
                     ID = diagnosis2Id,
                     PatientID = patientId,

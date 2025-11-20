@@ -1,5 +1,4 @@
-﻿using NeuronaLabs.DTOs.Requests;
-using NeuronaLabs.DTOs.Responses;
+﻿using NeuronaLabs.Application.DTOs.Responses;
 
 namespace NeuronaLabs.Domain.Repositories.Patients;
 

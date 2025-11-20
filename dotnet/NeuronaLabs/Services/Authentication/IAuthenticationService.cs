@@ -1,5 +1,5 @@
-﻿using NeuronaLabs.DTOs.Requests;
-using NeuronaLabs.DTOs.Responses;
+﻿using NeuronaLabs.Application.DTOs.Requests;
+using NeuronaLabs.Application.DTOs.Responses;
 
 namespace NeuronaLabs.Services.Authentication;
 

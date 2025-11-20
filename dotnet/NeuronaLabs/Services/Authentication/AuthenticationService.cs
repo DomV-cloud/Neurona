@@ -1,28 +1,21 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using NeuronaLabs.Application.DTOs.Requests;
+using NeuronaLabs.Application.DTOs.Responses;
 using NeuronaLabs.Authentication.JWT;
 using NeuronaLabs.Domain;
 using NeuronaLabs.Domain.Repositories.Patients;
-using NeuronaLabs.DTOs.Requests;
-using NeuronaLabs.DTOs.Responses;
 
 namespace NeuronaLabs.Services.Authentication;
 
-public class AuthenticationService : IAuthenticationService
+public class AuthenticationService(
+    IPatientRepository patientRepository,
+    IJwtTokenGenerator jwtTokenGenerator,
+    IPasswordHasher<Patient> passwordHasher
+) : IAuthenticationService
 {
-    private readonly IPatientRepository _patientRepository;
-    private readonly IJwtTokenGenerator _jwtTokenGenerator;
-    private readonly IPasswordHasher<Patient> _passwordHasher;
-
-    public AuthenticationService(
-        IPatientRepository patientRepository,
-        IJwtTokenGenerator jwtTokenGenerator,
-        IPasswordHasher<Patient> passwordHasher
-    )
-    {
-        _patientRepository = patientRepository;
-        _jwtTokenGenerator = jwtTokenGenerator;
-        _passwordHasher = passwordHasher;
-    }
+    private readonly IPatientRepository _patientRepository = patientRepository;
+    private readonly IJwtTokenGenerator _jwtTokenGenerator = jwtTokenGenerator;
+    private readonly IPasswordHasher<Patient> _passwordHasher = passwordHasher;
 
     public async Task<GetLoginResponse> LoginAsync(
         string email,
@@ -55,7 +48,7 @@ public class AuthenticationService : IAuthenticationService
         CancellationToken cancellationToken
     )
     {
-        var normalizedEmail = input.Email.Trim().ToLowerInvariant();
+        var normalizedEmail = NormalizeEmail(input.Email);
 
         var userExists = await _patientRepository.GetPatientByEmailAsync(
             normalizedEmail,
@@ -68,27 +61,9 @@ public class AuthenticationService : IAuthenticationService
             );
         }
 
-        var patient = new Patient
-        {
-            FirstName = input.FirstName,
-            LastName = input.LastName,
-            Email = normalizedEmail,
-            Age = input.Age,
-            PasswordHash = string.Empty, // TODO: Resolve as nullable
-        };
+        var patient = new Patient(input.FirstName, input.LastName, normalizedEmail, input.Age);
 
-        if (input.Diagnostic is not null)
-        {
-            var diagnostic = new DiagnosticRecord
-            {
-                DiagnosisText = input.Diagnostic.DiagnosisText,
-                Notes = input.Diagnostic.Notes,
-            };
-
-            patient.Diagnostics.Add(diagnostic);
-        }
-
-        patient.PasswordHash = _passwordHasher.HashPassword(patient, input.Password);
+        patient.SetPasswordHash(_passwordHasher.HashPassword(patient, input.Password));
 
         var createdPatient = await _patientRepository.CreatePatientAsync(
             patient,
@@ -108,4 +83,6 @@ public class AuthenticationService : IAuthenticationService
             token
         );
     }
+
+    private string NormalizeEmail(string email) => email.Trim().ToLowerInvariant();
 }
