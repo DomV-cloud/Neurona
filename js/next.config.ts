@@ -12,20 +12,8 @@ const nextConfig: NextConfig = {
   //   unoptimized: true,
   // },
 
-  // Ensure proper rewrites for dynamic routes
-  async rewrites() {
-    return [
-      {
-        source: "/patient/:id",
-        destination: "/patient/:id",
-      },
-    ];
-  },
-
-  // Handle 404s properly
-  async redirects() {
-    return [];
-  },
+  // App Router handles dynamic routes automatically
+  // No manual rewrites needed for /patient/[id]
 };
 
 export default nextConfig;
