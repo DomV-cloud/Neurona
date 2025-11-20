@@ -9,6 +9,9 @@ on:
       - master
   workflow_dispatch:
 
+env:
+    APP_DIR: frontend
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -62,4 +65,5 @@ jobs:
           app-name: 'Neurona'
           slot-name: 'Production'
           package: .
+
           
