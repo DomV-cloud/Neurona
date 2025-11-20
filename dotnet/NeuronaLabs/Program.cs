@@ -13,6 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder
     .Services.AddGraphQLServer()
+    .ModifyRequestOptions(o =>
+    {
+        o.IncludeExceptionDetails = true;
+    })
     .AddQueryType<PatientQuery>()
     .AddMutationType<PatientMutation>()
     .AddType<DiagnosisMutation>();
@@ -57,6 +61,17 @@ builder
 builder.Services.AddCustomOptions(builder.Configuration).AddInfrastructure();
 
 var app = builder.Build();
+
+app.MapGet("/debug-conn", (IConfiguration config) =>
+{
+    var cs = config.GetConnectionString("sqlConnection")
+             ?? config["sqlConnection"]
+             ?? "NULL";
+
+    // jen abys náhodou nevypsal heslo pøímo
+    return cs.Replace("Password=", "Password=***");
+});
+
 
 if (app.Environment.IsDevelopment())
 {
