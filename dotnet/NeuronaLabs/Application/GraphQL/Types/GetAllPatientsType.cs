@@ -1,9 +1,9 @@
 ﻿namespace NeuronaLabs.Application.DTOs.Responses;
 
-public record GetAllPatientsResponse(
+public record GetAllPatientsType(
     Guid PatientID,
     string FirstName,
     string LastName,
     int Age,
-    GetDiagnosisResponse? LastDiagnosis
+    GetDiagnosisType? LastDiagnosis
 );

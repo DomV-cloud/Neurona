@@ -5,12 +5,12 @@ namespace NeuronaLabs.Domain.Repositories.Patients;
 public interface IPatientRepository
 {
     Task<Patient?> GetPatientByEmailAsync(string email, CancellationToken cancellationToken);
-    Task<PagedResponse<GetAllPatientsResponse>> GetAllPatientsAsync(
+    Task<PagedType<GetAllPatientsType>> GetAllPatientsAsync(
         int pageSize,
         int page,
         CancellationToken cancellationToken
     );
-    Task<GetPatientDetailInfoResponse> GetPatientDetailInfoAsync(
+    Task<GetPatientDetailInfoType> GetPatientDetailInfoAsync(
         Guid patientID,
         CancellationToken cancellationToken
     );

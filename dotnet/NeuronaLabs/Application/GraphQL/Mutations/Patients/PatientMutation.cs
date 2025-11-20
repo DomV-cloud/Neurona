@@ -1,28 +1,21 @@
-﻿using NeuronaLabs.Application.DTOs.Requests;
+﻿using NeuronaLabs.Application.DomainServices.Diagnoses;
+using NeuronaLabs.Application.DTOs.Requests;
 using NeuronaLabs.Application.DTOs.Responses;
-using NeuronaLabs.Domain.Repositories.Diagnosis;
 using NeuronaLabs.Services.Authentication;
-using LoginRequest = NeuronaLabs.Application.DTOs.Requests.LoginRequest;
 
 namespace NeuronaLabs.Application.GraphQL.Mutations.Patients;
 
 public class PatientMutation
 {
-    public async Task<GetLoginResponse> Login(
-        LoginRequest input,
+    public async Task<GetLoginType> Login(
+        LoginType input,
         [Service] IAuthenticationService authService,
         CancellationToken cancellationToken
-    ) => await authService.LoginAsync(input.Email, input.Password, cancellationToken);
+    ) => await authService.LoginAsync(input, cancellationToken);
 
-    public async Task<RegisteredPatientResponse> Register(
+    public async Task<RegisteredPatientType> Register(
         CreatePatientRequest input,
         [Service] IAuthenticationService authService,
         CancellationToken cancellationToken
     ) => await authService.RegisterAsync(input, cancellationToken);
-
-    public async Task<UpdatedPatientDiagnosis> UpdatedPatientDiagnosis(
-        UpdatePatientDiagnosisRequest input,
-        [Service] IDiagnosisRepository patientRepository,
-        CancellationToken cancellationToken
-    ) => await patientRepository.UpdateDiagnosis(input, cancellationToken);
 }

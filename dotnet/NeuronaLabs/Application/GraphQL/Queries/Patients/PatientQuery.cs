@@ -5,14 +5,14 @@ namespace NeuronaLabs.Application.GraphQL.Queries.Patients;
 
 public class PatientQuery
 {
-    public Task<PagedResponse<GetAllPatientsResponse>> GetAll(
+    public Task<PagedType<GetAllPatientsType>> GetAll(
         [Service] IPatientRepository patientRepository,
         int page = 1,
         int pageSize = 50,
         CancellationToken cancellationToken = default
     ) => patientRepository.GetAllPatientsAsync(pageSize, page, cancellationToken);
 
-    public Task<GetPatientDetailInfoResponse> GetPatientDetails(
+    public Task<GetPatientDetailInfoType> GetPatientDetails(
         Guid patientId,
         [Service] IPatientRepository patientRepository,
         CancellationToken cancellationToken

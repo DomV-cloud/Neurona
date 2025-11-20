@@ -5,12 +5,8 @@ namespace NeuronaLabs.Services.Authentication;
 
 public interface IAuthenticationService
 {
-    public Task<GetLoginResponse> LoginAsync(
-        string email,
-        string password,
-        CancellationToken cancellationToken
-    );
-    public Task<RegisteredPatientResponse> RegisterAsync(
+    public Task<GetLoginType> LoginAsync(LoginType input, CancellationToken cancellationToken);
+    public Task<RegisteredPatientType> RegisterAsync(
         CreatePatientRequest input,
         CancellationToken cancellationToken
     );

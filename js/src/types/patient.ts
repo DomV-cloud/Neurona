@@ -146,6 +146,22 @@ export interface DeletePatientResponse {
   deletePatient: boolean;
 }
 
+// Create Diagnosis Types
+export interface CreateDiagnosisInput {
+  patientID: string;
+  diagnosisText: string;
+  notes: string;
+}
+
+export interface CreateDiagnosisResponse {
+  patientID: string;
+  notes: string;
+}
+
+export interface CreateDiagnosisResult {
+  createDiagnosis: CreateDiagnosisResponse;
+}
+
 // Update Diagnosis Types
 export interface UpdatePatientDiagnoseRequestInput {
   patientID: string;

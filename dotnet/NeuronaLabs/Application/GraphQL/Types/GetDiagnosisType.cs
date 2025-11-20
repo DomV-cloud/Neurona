@@ -1,6 +1,6 @@
 ﻿namespace NeuronaLabs.Application.DTOs.Responses;
 
-public record GetDiagnosisResponse(
+public record GetDiagnosisType(
     Guid ID,
     string DiagnosisText,
     string? Notes,

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using NeuronaLabs.Application.DTOs.Requests;
 using NeuronaLabs.Application.DTOs.Responses;
+using NeuronaLabs.Application.GraphQL.Inputs;
 using NeuronaLabs.Authentication.JWT;
 using NeuronaLabs.Domain;
 using NeuronaLabs.Domain.Repositories.Patients;
@@ -17,17 +18,17 @@ public class AuthenticationService(
     private readonly IJwtTokenGenerator _jwtTokenGenerator = jwtTokenGenerator;
     private readonly IPasswordHasher<Patient> _passwordHasher = passwordHasher;
 
-    public async Task<GetLoginResponse> LoginAsync(
-        string email,
-        string password,
-        CancellationToken cancellationToken
-    )
+    public async Task<GetLoginType> LoginAsync(LoginType input, CancellationToken cancellationToken)
     {
         var patient =
-            await _patientRepository.GetPatientByEmailAsync(email, cancellationToken)
+            await _patientRepository.GetPatientByEmailAsync(input.Email, cancellationToken)
             ?? throw new InvalidOperationException("Invalid email or password.");
 
-        var result = _passwordHasher.VerifyHashedPassword(patient, patient.PasswordHash, password);
+        var result = _passwordHasher.VerifyHashedPassword(
+            patient,
+            patient.PasswordHash,
+            input.Password
+        );
         if (result == PasswordVerificationResult.Failed)
         {
             throw new InvalidOperationException("Invalid email or password.");
@@ -40,10 +41,10 @@ public class AuthenticationService(
             throw new InvalidOperationException("Could not generate JWT token.");
         }
 
-        return new GetLoginResponse(patient.FirstName, patient.LastName, patient.Email, token);
+        return new GetLoginType(patient.FirstName, patient.LastName, patient.Email, token);
     }
 
-    public async Task<RegisteredPatientResponse> RegisterAsync(
+    public async Task<RegisteredPatientType> RegisterAsync(
         CreatePatientRequest input,
         CancellationToken cancellationToken
     )
@@ -76,7 +77,7 @@ public class AuthenticationService(
             throw new InvalidOperationException("Could not generate JWT token.");
         }
 
-        return new RegisteredPatientResponse(
+        return new RegisteredPatientType(
             createdPatient.FirstName,
             createdPatient.LastName,
             createdPatient.Email,

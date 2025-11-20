@@ -19,7 +19,7 @@ public class PatientRepository(NeuronaLabsDbContext dbContext) : IPatientReposit
         return patient;
     }
 
-    public async Task<PagedResponse<GetAllPatientsResponse>> GetAllPatientsAsync(
+    public async Task<PagedType<GetAllPatientsType>> GetAllPatientsAsync(
         int pageSize,
         int page,
         CancellationToken cancellationToken
@@ -35,13 +35,13 @@ public class PatientRepository(NeuronaLabsDbContext dbContext) : IPatientReposit
         var items = await query
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
-            .Select(p => new GetAllPatientsResponse(
+            .Select(p => new GetAllPatientsType(
                 p.ID,
                 p.FirstName,
                 p.LastName,
                 p.Age,
                 p.Diagnoses.OrderByDescending(dr => dr.CreatedAt)
-                    .Select(dr => new GetDiagnosisResponse(
+                    .Select(dr => new GetDiagnosisType(
                         dr.ID,
                         dr.DiagnosisText,
                         dr.Notes,
@@ -52,7 +52,7 @@ public class PatientRepository(NeuronaLabsDbContext dbContext) : IPatientReposit
             ))
             .ToListAsync(cancellationToken);
 
-        return new PagedResponse<GetAllPatientsResponse>(items, page, pageSize, totalCount);
+        return new PagedType<GetAllPatientsType>(items, page, pageSize, totalCount);
     }
 
     public async Task<Patient?> GetPatientByEmailAsync(
@@ -66,7 +66,7 @@ public class PatientRepository(NeuronaLabsDbContext dbContext) : IPatientReposit
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<GetPatientDetailInfoResponse> GetPatientDetailInfoAsync(
+    public async Task<GetPatientDetailInfoType> GetPatientDetailInfoAsync(
         Guid patientID,
         CancellationToken cancellationToken
     )
@@ -75,12 +75,12 @@ public class PatientRepository(NeuronaLabsDbContext dbContext) : IPatientReposit
             await _dbContext
                 .Patients.AsNoTracking()
                 .Where(p => p.ID == patientID)
-                .Select(p => new GetPatientDetailInfoResponse(
+                .Select(p => new GetPatientDetailInfoType(
                     p.FirstName,
                     p.LastName,
                     p.Email,
                     p.Age,
-                    p.Diagnoses.Select(dr => new GetDiagnosisResponse(
+                    p.Diagnoses.Select(dr => new GetDiagnosisType(
                             dr.ID,
                             dr.DiagnosisText,
                             dr.Notes,

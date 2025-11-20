@@ -1,8 +1,9 @@
 ﻿namespace NeuronaLabs.Application.DTOs.Responses;
 
-public record RegisteredPatientResponse(
+public record GetPatientDetailInfoType(
     string FirstName,
     string LastName,
     string Email,
-    string Token
+    int Age,
+    List<GetDiagnosisType> Diagnoses
 );

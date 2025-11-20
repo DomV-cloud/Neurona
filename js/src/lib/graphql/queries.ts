@@ -79,6 +79,15 @@ export const DELETE_PATIENT = gql`
   }
 `;
 
+export const CREATE_DIAGNOSIS = gql`
+  mutation CreateDiagnosis($input: CreateDiagnosisInput!) {
+    createDiagnosis(input: $input) {
+      patientID
+      notes
+    }
+  }
+`;
+
 export const UPDATE_PATIENT_DIAGNOSIS = gql`
   mutation UpdatePatientDiagnosis($input: UpdatePatientDiagnosisRequestInput!) {
     updatedPatientDiagnosis(input: $input) {

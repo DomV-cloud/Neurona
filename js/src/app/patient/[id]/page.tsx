@@ -29,10 +29,12 @@ import {
   TrendingUp,
   Shield,
   Stethoscope,
+  Plus,
 } from "lucide-react";
 import { Suspense, useState } from "react";
 import EditDiagnosisModal from "../../../components/patients/EditDiagnosisModal";
 import ImageViewerModal from "../../../components/patients/ImageViewerModal";
+import CreateDiagnosisModal from "../../../components/patients/CreateDiagnosisModal";
 
 function PatientDetailsContent() {
   const params = useParams();
@@ -44,10 +46,17 @@ function PatientDetailsContent() {
   const [viewingImage, setViewingImage] = useState<ExaminationImage | null>(
     null
   );
+  const [showCreateDiagnosis, setShowCreateDiagnosis] = useState(false);
 
-  const { data, loading, error } = useQuery<GetPatientResponse>(GET_PATIENT, {
-    variables: { patientId },
-  });
+  const { data, loading, error, refetch } = useQuery<GetPatientResponse>(
+    GET_PATIENT,
+    {
+      variables: { patientId },
+      fetchPolicy: "network-only",
+      errorPolicy: "all",
+      notifyOnNetworkStatusChange: true,
+    }
+  );
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -399,10 +408,20 @@ function PatientDetailsContent() {
 
           {/* Diagnosis Timeline */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
-              <Clock className="w-6 h-6 mr-2 text-indigo-600" />
-              Diagnosis Timeline ({mockPatientData.diagnoses.length} records)
-            </h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 flex items-center">
+                <Clock className="w-6 h-6 mr-2 text-indigo-600" />
+                Diagnosis Timeline ({mockPatientData.diagnoses.length} records)
+              </h2>
+              <button
+                onClick={() => setShowCreateDiagnosis(true)}
+                className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                title="Add New Diagnosis"
+              >
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline">Add Diagnosis</span>
+              </button>
+            </div>
 
             {mockPatientData.diagnoses.length === 0 ? (
               <div className="bg-gray-50 rounded-lg p-8 text-center">
@@ -647,6 +666,24 @@ function PatientDetailsContent() {
           image={viewingImage}
         />
       )}
+
+      {/* Create Diagnosis Modal */}
+      <CreateDiagnosisModal
+        isOpen={showCreateDiagnosis}
+        onClose={() => setShowCreateDiagnosis(false)}
+        patientId={patientId}
+        onSuccess={async () => {
+          console.log("Starting manual refetch after diagnosis creation");
+          try {
+            await refetch({ patientId });
+            console.log("Manual refetch completed successfully");
+          } catch (error) {
+            console.error("Manual refetch failed:", error);
+            // Force page reload as fallback
+            window.location.reload();
+          }
+        }}
+      />
     </div>
   );
 }
