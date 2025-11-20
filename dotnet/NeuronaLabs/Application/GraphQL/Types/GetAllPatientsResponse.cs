@@ -5,5 +5,5 @@ public record GetAllPatientsResponse(
     string FirstName,
     string LastName,
     int Age,
-    DiagnosticRecordResponse? LastDiagnosticRecord
+    GetDiagnosisResponse? LastDiagnosis
 );

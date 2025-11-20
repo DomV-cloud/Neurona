@@ -1,8 +1,8 @@
 ﻿namespace NeuronaLabs.Application.DTOs.Responses;
 
-public record UpdatedPatientDiagnose(
+public record UpdatedPatientDiagnosis(
     Guid? PatientID,
-    Guid? DiagnosticID,
+    Guid? DiagnosisID,
     string? DiagnosisText,
     string? Notes,
     DateTimeOffset? UpdatedAt

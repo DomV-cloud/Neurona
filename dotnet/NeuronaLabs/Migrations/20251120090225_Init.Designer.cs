@@ -12,7 +12,7 @@ using NeuronaLabs.Infrastructure.Database;
 namespace NeuronaLabs.Migrations
 {
     [DbContext(typeof(NeuronaLabsDbContext))]
-    [Migration("20251120084145_Init")]
+    [Migration("20251120090225_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace NeuronaLabs.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("NeuronaLabs.Domain.DiagnosticRecord", b =>
+            modelBuilder.Entity("NeuronaLabs.Domain.Diagnosis", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace NeuronaLabs.Migrations
 
                     b.HasIndex("PatientID");
 
-                    b.ToTable("DiagnosticRecords");
+                    b.ToTable("Diagnoses");
 
                     b.HasData(
                         new
@@ -113,10 +113,10 @@ namespace NeuronaLabs.Migrations
                         });
                 });
 
-            modelBuilder.Entity("NeuronaLabs.Domain.DiagnosticRecord", b =>
+            modelBuilder.Entity("NeuronaLabs.Domain.Diagnosis", b =>
                 {
                     b.HasOne("NeuronaLabs.Domain.Patient", "Patient")
-                        .WithMany("Diagnostics")
+                        .WithMany("Diagnoses")
                         .HasForeignKey("PatientID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -126,7 +126,7 @@ namespace NeuronaLabs.Migrations
 
             modelBuilder.Entity("NeuronaLabs.Domain.Patient", b =>
                 {
-                    b.Navigation("Diagnostics");
+                    b.Navigation("Diagnoses");
                 });
 #pragma warning restore 612, 618
         }

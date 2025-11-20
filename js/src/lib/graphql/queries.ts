@@ -11,7 +11,7 @@ export const GET_PATIENTS = gql`
         firstName
         lastName
         age
-        lastDiagnosticRecord {
+        lastDiagnosis {
           id
           diagnosisText
           createdAt
@@ -29,7 +29,7 @@ export const GET_PATIENT = gql`
       lastName
       email
       age
-      diagnosticRecords {
+      diagnoses {
         id
         diagnosisText
         createdAt
@@ -46,7 +46,7 @@ export const CREATE_PATIENT = gql`
       firstName
       lastName
       age
-      lastDiagnosticRecord {
+      diagnoses {
         id
         diagnosisText
         createdAt
@@ -63,7 +63,7 @@ export const UPDATE_PATIENT = gql`
       firstName
       lastName
       age
-      lastDiagnosticRecord {
+      lastDiagnosis {
         id
         diagnosisText
         createdAt
@@ -83,7 +83,7 @@ export const UPDATE_PATIENT_DIAGNOSIS = gql`
   mutation UpdatePatientDiagnosis($input: UpdatePatientDiagnoseRequestInput!) {
     updatedPatientDiagnose(input: $input) {
       patientID
-      diagnosticID
+      diagnosisID
       diagnosisText
       notes
       updatedAt

@@ -1,6 +1,6 @@
 ﻿namespace NeuronaLabs.Domain;
 
-public class DiagnosticRecord(Guid patientID, string diagnosisText, string? notes)
+public class Diagnosis(Guid patientID, string diagnosisText, string? notes)
 {
     public Guid ID { get; set; } = Guid.NewGuid();
 
@@ -14,7 +14,7 @@ public class DiagnosticRecord(Guid patientID, string diagnosisText, string? note
 
     public string? Notes { get; private set; } = notes;
 
-    public void UpdateDiagnosis(string newDiagnosis, string? newNotes = null)
+    public void UpdateDiagnosis(string? newDiagnosis, string? newNotes = null)
     {
         SetDiagnosisText(newDiagnosis);
         if (newNotes is not null)
@@ -25,7 +25,7 @@ public class DiagnosticRecord(Guid patientID, string diagnosisText, string? note
         UpdatedAt = DateTimeOffset.UtcNow;
     }
 
-    public void SetDiagnosisText(string diagnosisText)
+    public void SetDiagnosisText(string? diagnosisText)
     {
         if (string.IsNullOrWhiteSpace(diagnosisText))
             throw new ArgumentException("Diagnosis text cannot be empty.", nameof(diagnosisText));

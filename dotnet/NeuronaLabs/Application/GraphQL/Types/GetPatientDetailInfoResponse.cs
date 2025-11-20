@@ -5,5 +5,5 @@ public record GetPatientDetailInfoResponse(
     string LastName,
     string Email,
     int Age,
-    List<DiagnosticRecordResponse> DiagnosticRecords
+    List<GetDiagnosisResponse> Diagnoses
 );

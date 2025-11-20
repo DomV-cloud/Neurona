@@ -40,8 +40,8 @@ public class PatientRepository(NeuronaLabsDbContext dbContext) : IPatientReposit
                 p.FirstName,
                 p.LastName,
                 p.Age,
-                p.Diagnostics.OrderByDescending(dr => dr.CreatedAt)
-                    .Select(dr => new DiagnosticRecordResponse(
+                p.Diagnoses.OrderByDescending(dr => dr.CreatedAt)
+                    .Select(dr => new GetDiagnosisResponse(
                         dr.ID,
                         dr.DiagnosisText,
                         dr.Notes,
@@ -80,7 +80,7 @@ public class PatientRepository(NeuronaLabsDbContext dbContext) : IPatientReposit
                     p.LastName,
                     p.Email,
                     p.Age,
-                    p.Diagnostics.Select(dr => new DiagnosticRecordResponse(
+                    p.Diagnoses.Select(dr => new GetDiagnosisResponse(
                             dr.ID,
                             dr.DiagnosisText,
                             dr.Notes,

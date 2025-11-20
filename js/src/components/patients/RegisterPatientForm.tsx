@@ -112,7 +112,7 @@ export default function RegisterPatientForm({
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const updateDiagnostic = (
+  const updateDiagnosis = (
     field: keyof CreatePatientRequestInput["diagnostic"],
     value: string
   ) => {
@@ -229,7 +229,7 @@ export default function RegisterPatientForm({
                 required
                 value={formData.diagnostic.diagnosisText}
                 onChange={(e) =>
-                  updateDiagnostic("diagnosisText", e.target.value)
+                  updateDiagnosis("diagnosisText", e.target.value)
                 }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300 text-gray-900 placeholder-gray-500"
                 placeholder="e.g., Migraine, Hypertension, etc."
@@ -241,7 +241,7 @@ export default function RegisterPatientForm({
               </label>
               <textarea
                 value={formData.diagnostic.notes}
-                onChange={(e) => updateDiagnostic("notes", e.target.value)}
+                onChange={(e) => updateDiagnosis("notes", e.target.value)}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-300 text-gray-900 placeholder-gray-500"
                 placeholder="Additional notes about the patient's condition..."

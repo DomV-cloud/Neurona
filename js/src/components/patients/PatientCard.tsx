@@ -34,25 +34,25 @@ export default function PatientCard({ patient }: PatientCardProps) {
         </p>
       </div>
 
-      {patient.lastDiagnosticRecord && (
+      {patient.lastDiagnosis && (
         <div className="bg-blue-50 rounded-lg p-4 mb-4">
           <h4 className="font-semibold text-gray-900 mb-2">Latest Diagnosis</h4>
           <p className="text-sm font-medium text-blue-800 mb-1">
-            {patient.lastDiagnosticRecord.diagnosisText}
+            {patient.lastDiagnosis.diagnosisText}
           </p>
           <p className="text-xs text-gray-600 mb-2">
-            {formatDate(patient.lastDiagnosticRecord.createdAt)}
+            {formatDate(patient.lastDiagnosis.createdAt)}
           </p>
           <p className="text-sm text-gray-700">
-            {patient.lastDiagnosticRecord.notes}
+            {patient.lastDiagnosis.notes}
           </p>
         </div>
       )}
 
-      {!patient.lastDiagnosticRecord && (
+      {!patient.lastDiagnosis && (
         <div className="bg-gray-50 rounded-lg p-4 mb-4">
           <p className="text-sm text-gray-500 italic">
-            No diagnostic records available
+            No diagnosis records available
           </p>
         </div>
       )}

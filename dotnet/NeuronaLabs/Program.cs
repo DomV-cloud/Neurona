@@ -3,14 +3,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NeuronaLabs;
+using NeuronaLabs.Application.GraphQL.Mutations.Patients;
+using NeuronaLabs.Application.GraphQL.Queries.Patients;
 using NeuronaLabs.Infrastructure.Database;
-using NeuronaLabs.Scheme.Mutation;
-using NeuronaLabs.Scheme.Query;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
-builder.Services.AddGraphQLServer().AddQueryType<Query>().AddMutationType<Mutation>();
+builder.Services.AddGraphQLServer().AddQueryType<PatientQuery>().AddMutationType<PatientMutation>();
 
 builder.Services.AddNeuronaLabsServices();
 

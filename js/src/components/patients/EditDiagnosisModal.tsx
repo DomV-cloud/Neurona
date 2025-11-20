@@ -9,7 +9,7 @@ import {
 import {
   UpdatePatientDiagnoseRequestInput,
   UpdatePatientDiagnosisResult,
-  DiagnosticRecord,
+  Diagnosis,
 } from "../../types/patient";
 import { X, Save, Loader2, Edit3 } from "lucide-react";
 
@@ -17,7 +17,7 @@ interface EditDiagnosisModalProps {
   isOpen: boolean;
   onClose: () => void;
   patientId: string;
-  diagnosis: DiagnosticRecord;
+  diagnosis: Diagnosis;
 }
 
 export default function EditDiagnosisModal({

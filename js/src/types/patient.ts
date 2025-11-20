@@ -1,4 +1,4 @@
-export interface DiagnosticRecord {
+export interface Diagnosis {
   id: string;
   diagnosisText: string;
   createdAt: string;
@@ -24,7 +24,7 @@ export interface Patient {
   firstName: string;
   lastName: string;
   age: number;
-  lastDiagnosticRecord?: DiagnosticRecord;
+  lastDiagnosis?: Diagnosis;
 }
 
 // Legacy interface for form compatibility - will be updated later
@@ -117,7 +117,7 @@ export interface PatientDetails {
     relationship: string;
     phone: string;
   };
-  diagnosticRecords: DiagnosticRecord[];
+  diagnoses: Diagnosis[];
   vitalSigns?: VitalSigns;
 }
 
@@ -156,7 +156,7 @@ export interface UpdatePatientDiagnoseRequestInput {
 
 export interface UpdatePatientDiagnosisResponse {
   patientID: string;
-  diagnosticID: string;
+  diagnosisID: string;
   diagnosisText: string;
   notes: string;
   updatedAt: string;

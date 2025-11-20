@@ -1,8 +1,8 @@
 ﻿namespace NeuronaLabs.Application.DTOs.Requests;
 
-public record UpdatePatientDiagnoseRequest(
+public record UpdatePatientDiagnosisRequest(
     Guid PatientID,
-    Guid DiagnoseID,
+    Guid DiagnosisID,
     string? DiagnosisText,
     string? Notes
 );

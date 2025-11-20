@@ -11,7 +11,7 @@ public class Patient(string firstName, string lastName, string email, int age)
 
     public string PasswordHash { get; private set; } = null!;
 
-    public List<DiagnosticRecord>? Diagnostics { get; private set; } = [];
+    public List<Diagnosis>? Diagnoses { get; private set; } = [];
 
     public void SetPasswordHash(string passwordHash)
     {

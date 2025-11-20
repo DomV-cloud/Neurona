@@ -6,13 +6,13 @@ namespace NeuronaLabs.Infrastructure.Database;
 public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
 {
     public DbSet<Patient> Patients => Set<Patient>();
-    public DbSet<DiagnosticRecord> DiagnosticRecords => Set<DiagnosticRecord>();
+    public DbSet<Diagnosis> Diagnoses => Set<Diagnosis>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
             .Entity<Patient>()
-            .HasMany(p => p.Diagnostics)
+            .HasMany(p => p.Diagnoses)
             .WithOne(dr => dr.Patient)
             .HasForeignKey(dr => dr.PatientID)
             .OnDelete(DeleteBehavior.Cascade);
@@ -39,7 +39,7 @@ public class NeuronaLabsDbContext(DbContextOptions options) : DbContext(options)
             );
 
         modelBuilder
-            .Entity<DiagnosticRecord>()
+            .Entity<Diagnosis>()
             .HasData(
                 new
                 {

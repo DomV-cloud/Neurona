@@ -1,9 +1,9 @@
 ﻿using NeuronaLabs.Application.DTOs.Responses;
 using NeuronaLabs.Domain.Repositories.Patients;
 
-namespace NeuronaLabs.Scheme.Query;
+namespace NeuronaLabs.Application.GraphQL.Queries.Patients;
 
-public class Query
+public class PatientQuery
 {
     public Task<PagedResponse<GetAllPatientsResponse>> GetAll(
         [Service] IPatientRepository patientRepository,

@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { GET_PATIENT } from "../../../lib/graphql/queries";
 import {
   GetPatientResponse,
-  DiagnosticRecord,
+  Diagnosis,
   ExaminationImage,
 } from "../../../types/patient";
 import {
@@ -39,7 +39,7 @@ function PatientDetailsContent() {
   const router = useRouter();
   const patientId = params.id as string;
   const [editingDiagnosis, setEditingDiagnosis] =
-    useState<DiagnosticRecord | null>(null);
+    useState<Diagnosis | null>(null);
   const [viewingImage, setViewingImage] = useState<ExaminationImage | null>(
     null
   );
@@ -123,7 +123,7 @@ function PatientDetailsContent() {
       height: 178,
       lastUpdated: "2024-11-19T10:30:00Z",
     },
-    diagnosticRecords: patient.diagnosticRecords.map((record, index) => ({
+    diagnoses: patient.diagnoses.map((record, index) => ({
       ...record,
       severity: (index % 4 === 0
         ? "High"
@@ -396,33 +396,31 @@ function PatientDetailsContent() {
             </div>
           </div>
 
-          {/* Diagnostic Timeline */}
+          {/* Diagnosis Timeline */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
               <Clock className="w-6 h-6 mr-2 text-indigo-600" />
-              Diagnostic Timeline ({
-                mockPatientData.diagnosticRecords.length
-              }{" "}
+              Diagnosis Timeline ({mockPatientData.diagnoses.length}{" "}
               records)
             </h2>
 
-            {mockPatientData.diagnosticRecords.length === 0 ? (
+            {mockPatientData.diagnoses.length === 0 ? (
               <div className="bg-gray-50 rounded-lg p-8 text-center">
                 <Stethoscope className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                 <p className="text-gray-500 text-lg">
-                  No diagnostic records found
+                  No diagnosis records found
                 </p>
                 <p className="text-gray-400 text-sm mt-2">
-                  Diagnostic records will appear here once they are added to the
+                  Diagnosis records will appear here once they are added to the
                   patient's file.
                 </p>
               </div>
             ) : (
               <div className="space-y-6">
-                {mockPatientData.diagnosticRecords.map((record, index) => (
+                {mockPatientData.diagnoses.map((record, index) => (
                   <div key={record.id} className="relative">
                     {/* Timeline line */}
-                    {index < mockPatientData.diagnosticRecords.length - 1 && (
+                    {index < mockPatientData.diagnoses.length - 1 && (
                       <div className="absolute left-6 top-16 w-0.5 h-full bg-gray-200"></div>
                     )}
 
@@ -434,7 +432,7 @@ function PatientDetailsContent() {
                         )} border-2`}
                       >
                         <span className="text-xs font-bold">
-                          #{mockPatientData.diagnosticRecords.length - index}
+                          #{mockPatientData.diagnoses.length - index}
                         </span>
                       </div>
 
@@ -600,7 +598,7 @@ function PatientDetailsContent() {
                                           {image.bodyPart} {image.type}
                                         </h4>
                                         <span className="text-xs text-gray-500">
-                                          {formatDate(image.timestamp)}
+                                          {formatDate(image.createdAt)}
                                         </span>
                                       </div>
                                       <p className="text-sm text-gray-700 leading-relaxed mb-2">
