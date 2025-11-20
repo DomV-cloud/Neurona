@@ -3,8 +3,7 @@
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
 const httpLink = new HttpLink({
-  uri: "https://neuronalabsapi-eagqchf9dme0f4bw.westeurope-01.azurewebsites.net/graphql/",
-  // local host: https://localhost:7066/graphql
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_URL,
 });
 
 export const client = new ApolloClient({
